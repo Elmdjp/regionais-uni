@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora de acréscimos e descontos proporcionais para alteração de data de vencimento e de multa por quebra de contrato.">
+  <title>Calculadora Financeira | Regionais UNI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="dashboard-header">
+      <div class="header-copy">
+        <span class="eyebrow">Dashboard financeira</span>
+        <h1>Calculadora Financeira</h1>
+        <p>Calcule acréscimos/descontos por mudança de vencimento ou a multa por quebra de contrato.</p>
+      </div>
+    </header>
+
+    <div class="tab-bar" role="tablist">
+      <button type="button" class="tab-button active" data-tab="due-date" role="tab" aria-selected="true" aria-controls="panel-due-date">
+        Proporcional de vencimento
+      </button>
+      <button type="button" class="tab-button" data-tab="contract-break" role="tab" aria-selected="false" aria-controls="panel-contract-break">
+        Quebra de contrato
+      </button>
+    </div>
+
+    <main class="dashboard-grid" id="panel-due-date" data-tab-panel="due-date">
+      <section class="panel input-panel" aria-labelledby="form-title">
+        <div class="panel-heading">
+          <div>
+            <span class="section-label">Dados do cliente</span>
+            <h2 id="form-title">Informações para cálculo</h2>
+          </div>
+          <span class="badge">Mês comercial: 30 dias</span>
+        </div>
+
+        <!-- Formulário principal: todo o cálculo acontece no navegador. -->
+        <form id="calculator-form" novalidate>
+          <div class="form-group">
+            <label for="monthly-fee">Valor da mensalidade</label>
+            <div class="currency-field">
+              <span>R$</span>
+              <input
+                type="text"
+                id="monthly-fee"
+                name="monthlyFee"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="100,00"
+                aria-describedby="monthly-fee-error"
+              >
+            </div>
+            <small id="monthly-fee-error" class="error-message" aria-live="polite"></small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="current-due-day">Data atual de vencimento</label>
+              <select id="current-due-day" name="currentDueDay">
+                <option value="1">Dia 1</option>
+                <option value="5">Dia 5</option>
+                <option value="10">Dia 10</option>
+                <option value="15">Dia 15</option>
+                <option value="20">Dia 20</option>
+                <option value="25">Dia 25</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="current-due-month">Mês atual de vencimento</label>
+              <input
+                type="month"
+                id="current-due-month"
+                name="currentDueMonth"
+                aria-describedby="date-error"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="new-due-day">Nova data de vencimento</label>
+              <select id="new-due-day" name="newDueDay">
+                <option value="1">Dia 1</option>
+                <option value="5">Dia 5</option>
+                <option value="10">Dia 10</option>
+                <option value="15">Dia 15</option>
+                <option value="20">Dia 20</option>
+                <option value="25">Dia 25</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="new-due-month">Mês da nova data</label>
+              <input
+                type="month"
+                id="new-due-month"
+                name="newDueMonth"
+                aria-describedby="date-error"
+                required
+              >
+            </div>
+          </div>
+          <small id="date-error" class="error-message" aria-live="polite"></small>
+
+          <button type="submit" class="calculate-button">
+            <span aria-hidden="true">%</span>
+            Calcular proporcional
+          </button>
+        </form>
+      </section>
+
+      <section class="panel result-panel" aria-labelledby="result-title">
+        <div class="panel-heading">
+          <div>
+            <span class="section-label">Resultado</span>
+            <h2 id="result-title">Resumo do cálculo</h2>
+          </div>
+          <span id="result-status" class="status-pill status-neutral">Aguardando</span>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon" aria-hidden="true">%</div>
+          <p>Informe valor, dia e mês de cada vencimento para visualizar o proporcional.</p>
+        </div>
+
+        <!-- Card preenchido pelo JavaScript após um cálculo válido. -->
+        <div id="result-content" class="result-content hidden" aria-live="polite">
+          <div class="highlight-box">
+            <span id="change-type-label">Tipo de alteração</span>
+            <strong id="proportional-value">R$ 0,00</strong>
+            <p id="result-message">Nenhum cálculo realizado.</p>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">R$</span>
+              <span>Valor da mensalidade</span>
+              <strong id="summary-monthly-fee">R$ 0,00</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">01</span>
+              <span>Data atual</span>
+              <strong id="summary-current-day">Dia 1</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">25</span>
+              <span>Nova data</span>
+              <strong id="summary-new-day">Dia 1</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">D</span>
+              <span>Diferença de dias</span>
+              <strong id="summary-day-difference">0 dias</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">/30</span>
+              <span>Valor diário</span>
+              <strong id="summary-daily-value">R$ 0,00</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">=</span>
+              <span>Tipo de alteração</span>
+              <strong id="summary-change-type">Sem alteração</strong>
+            </div>
+            <div class="summary-item full-width">
+              <span class="summary-icon" aria-hidden="true">VF</span>
+              <span>Valor do ajuste estimado</span>
+              <strong id="summary-final-value">R$ 0,00</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <main class="dashboard-grid hidden" id="panel-contract-break" data-tab-panel="contract-break">
+      <section class="panel input-panel" aria-labelledby="contract-form-title">
+        <div class="panel-heading">
+          <div>
+            <span class="section-label">Dados do contrato</span>
+            <h2 id="contract-form-title">Informações para cálculo</h2>
+          </div>
+          <span class="badge">Vigência: 12 meses</span>
+        </div>
+
+        <form id="contract-form" novalidate>
+          <div class="form-group">
+            <label for="contract-value-select">Valor de referência da quebra de contrato</label>
+            <select id="contract-value-select" name="contractValueOption">
+              <option value="790">R$ 790,00</option>
+              <option value="240">R$ 240,00</option>
+              <option value="550">R$ 550,00</option>
+              <option value="960">R$ 960,00</option>
+              <option value="custom">Outro valor</option>
+            </select>
+          </div>
+
+          <div class="form-group hidden" id="custom-value-group">
+            <label for="custom-contract-value">Valor personalizado</label>
+            <div class="currency-field">
+              <span>R$</span>
+              <input
+                type="text"
+                id="custom-contract-value"
+                name="customContractValue"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="100,00"
+              >
+            </div>
+          </div>
+          <small id="contract-value-error" class="error-message" aria-live="polite"></small>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="signing-date">Data de assinatura do contrato</label>
+              <input
+                type="date"
+                id="signing-date"
+                name="signingDate"
+                aria-describedby="contract-date-error"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="contract-due-day">Dia de vencimento da mensalidade</label>
+              <select id="contract-due-day" name="contractDueDay">
+                <option value="1">Dia 1</option>
+                <option value="5">Dia 5</option>
+                <option value="10">Dia 10</option>
+                <option value="15">Dia 15</option>
+                <option value="20">Dia 20</option>
+                <option value="25">Dia 25</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reference-month">Mês de referência do cálculo (ex.: mês do cancelamento)</label>
+            <input
+              type="month"
+              id="reference-month"
+              name="referenceMonth"
+              aria-describedby="contract-date-error"
+              required
+            >
+          </div>
+          <small id="contract-date-error" class="error-message" aria-live="polite"></small>
+
+          <button type="submit" class="calculate-button">
+            <span aria-hidden="true">%</span>
+            Calcular quebra de contrato
+          </button>
+        </form>
+      </section>
+
+      <section class="panel result-panel" aria-labelledby="contract-result-title">
+        <div class="panel-heading">
+          <div>
+            <span class="section-label">Resultado</span>
+            <h2 id="contract-result-title">Resumo da multa</h2>
+          </div>
+          <span id="contract-result-status" class="status-pill status-neutral">Aguardando</span>
+        </div>
+
+        <div id="contract-empty-state" class="empty-state">
+          <div class="empty-icon" aria-hidden="true">%</div>
+          <p>Informe o valor de referência, a data de assinatura, o dia de vencimento e o mês de referência para calcular a multa.</p>
+        </div>
+
+        <div id="contract-result-content" class="result-content hidden" aria-live="polite">
+          <div class="highlight-box">
+            <span id="contract-highlight-label">Valor da multa</span>
+            <strong id="contract-final-value">R$ 0,00</strong>
+            <p id="contract-result-message">Nenhum cálculo realizado.</p>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">R$</span>
+              <span>Valor de referência</span>
+              <strong id="contract-summary-reference-value">R$ 0,00</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">AS</span>
+              <span>Assinatura do contrato</span>
+              <strong id="contract-summary-signing-date">-</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">VC</span>
+              <span>Dia de vencimento</span>
+              <strong id="contract-summary-due-day">-</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">MR</span>
+              <span>Mês de referência</span>
+              <strong id="contract-summary-reference-month">-</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">MC</span>
+              <span>Meses cumpridos</span>
+              <strong id="contract-summary-months-completed">0 de 12</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">MF</span>
+              <span>Meses restantes</span>
+              <strong id="contract-summary-months-remaining">0 de 12</strong>
+            </div>
+            <div class="summary-item full-width">
+              <span class="summary-icon" aria-hidden="true">VF</span>
+              <span>Valor final da multa</span>
+              <strong id="contract-summary-final-value">R$ 0,00</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="dashboard-footer">
+      Dashboard desenvolvida para cálculo proporcional de vencimento e de quebra de contrato
+    </footer>
+  </div>
+
+  <script src="tabs.js"></script>
+  <script src="script.js"></script>
+  <script src="contract-break.js"></script>
+</body>
+</html>
