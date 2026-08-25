@@ -281,7 +281,7 @@
     color: var(--text-muted); font-weight: 500;
     transition: all 0.2s ease;
   }
-  .city-tag.Distrito { font-style: italic; border-style: dashed; }
+  .city-tag.distrito { font-style: italic; border-style: dashed; }
 
   .city-tag.has-addr {
     cursor: pointer;
@@ -359,7 +359,7 @@
   <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Supervisor Comercial</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Supervisor Operacional</div>
   <div class="legend-item"><span style="font-size:0.85rem">📍</span> Clique na cidade para ver o endereço</div>
-  <div class="legend-item"><div class="legend-line"></div> Distrito / Vila</div>
+  <div class="legend-item"><div class="legend-line"></div> distrito / vila</div>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -382,8 +382,8 @@ const filiais = [
     cidades: [
       { nome: "Cujubim", addrs: [{ end: "Av. Cujubim, 2222 - Centro - CEP 76864-000" }] },
       { nome: "Vale do Anari", addrs: [{ end: "Av. Acyr Jose Damasceno, 4118 - Centro - CEP 76867-000" }] },
-      { nome: "5° BEC", Distrito: true },
-      { nome: "Estrela Azul", Distrito: true }
+      { nome: "5° BEC", distrito: true },
+      { nome: "Estrela Azul", distrito: true }
     ]
   },
   {
@@ -395,10 +395,10 @@ const filiais = [
       { nome: "Novo Horizonte D'Oeste", addrs: [{ end: "Av. Manoel Francisco de Lima Filho, 4979 - Centro - CEP 76956-000" }] },
       { nome: "São Felipe D'Oeste", addrs: [{ end: "Av. Capitão Silvio, 61 - Centro - CEP 76977-000" }] },
       { nome: "Primavera de Rondônia" },
-      { nome: "Jardinópolis", Distrito: true },
-      { nome: "Querência do Norte", Distrito: true },
-      { nome: "Novo Paraíso", Distrito: true },
-      { nome: "Nova Estrela", Distrito: true }
+      { nome: "Jardinópolis", distrito: true },
+      { nome: "Querência do Norte", distrito: true },
+      { nome: "Novo Paraíso", distrito: true },
+      { nome: "Nova Estrela", distrito: true }
     ]
   },
   {
@@ -415,7 +415,7 @@ const filiais = [
     cidades: [
       { nome: "Ouro Preto D'Oeste", addrs: [{ end: "Rua Ana Neri, 528 - Jardim Tropical - CEP 76920-000" }] },
       { nome: "Vale do Paraíso", addrs: [{ end: "Av. Paraná, Nº 2250 - Centro - CEP 76923-000" }] },
-      { nome: "Rondominas", Distrito: true, addrs: [{ end: "Rua Jorge Marcelino, 2450 - CEP 76920-000" }] }
+      { nome: "Rondominas", distrito: true, addrs: [{ end: "Rua Jorge Marcelino, 2450 - CEP 76920-000" }] }
     ]
   },
   {
@@ -423,8 +423,8 @@ const filiais = [
     gerente: "Bruno Messias da Silva", supervisor: "Maicon Henrique", operacional: "Kariny Nunes",
     cidades: [
       { nome: "Nova Brasilândia D'Oeste", addrs: [{ end: "Av. Juscelino Kubitschek, 3105 - Centro - CEP 76958-000" }] },
-      { nome: "Migrantenópolis", Distrito: true, addrs: [{ end: "Av. 25 de Agosto, 3282 - Centro - CEP 76956-000" }] },
-      { nome: "Santa de Guaporé", Distrito: true }
+      { nome: "Migrantenópolis", distrito: true, addrs: [{ end: "Av. 25 de Agosto, 3282 - Centro - CEP 76956-000" }] },
+      { nome: "Santa de Guaporé", distrito: true }
     ]
   },
   {
@@ -433,10 +433,10 @@ const filiais = [
     cidades: [
       { nome: "Presidente Médici", addrs: [{ end: "Rua José Vidal, 2648 - Centro - CEP 76916-000" }] },
       { nome: "Castanheiras" },
-      { nome: "Nova Londrina", Distrito: true },
-      { nome: "Novo Riachuelo", Distrito: true, vila: true },
-      { nome: "Estrela de Rondônia", Distrito: true },
-      { nome: "Bandeira Branca", Distrito: true }
+      { nome: "Nova Londrina", distrito: true },
+      { nome: "Novo Riachuelo", distrito: true, vila: true },
+      { nome: "Estrela de Rondônia", distrito: true },
+      { nome: "Bandeira Branca", distrito: true }
     ]
   },
   {
@@ -446,9 +446,9 @@ const filiais = [
       { nome: "Alvorada D'Oeste", addrs: [{ end: "Rua José de Alencar, 4906 - Centro - CEP 76930-000" }] },
       { nome: "Urupá", addrs: [{ end: "Av. Moacir de Paula Vieira, 3546 - Centro - CEP 76929-000" }] },
       { nome: "Teixeirópolis", addrs: [{ end: "Av. Afonso Pena, 2975 - Centro - CEP 76928-000" }] },
-      { nome: "Terra Boa", Distrito: true },
-      { nome: "Tancredópolis", Distrito: true },
-      { nome: "Nova Aliança", Distrito: true }
+      { nome: "Terra Boa", distrito: true },
+      { nome: "Tancredópolis", distrito: true },
+      { nome: "Nova Aliança", distrito: true }
     ]
   },
   {
@@ -459,15 +459,15 @@ const filiais = [
       { nome: "Alto Alegre dos Parecis", addrs: [{ end: "Av. Tancredo Neves, 3957 - Centro - CEP 76952-000" }] },
       { nome: "Porto Rolim do Guaporé", distrito: true },
       { nome: "Flor da Serra", distrito: true },
-      { nome: "Vila Marcão", Distrito: true },
-      { nome: "Nova Geaza", Distrito: true },
-      { nome: "Filadélfia", Distrito: true },
-      { nome: "São Luiz", Distrito: true },
-      { nome: "Santo Antônio", Distrito: true },
-      { nome: "Izidolândia", Distrito: true },
-      { nome: "São Luis", Aldeia: true },
-      { nome: "Serrinha", Aldeia: true },
-      { nome: "Jatobá", Aldeia: true }
+      { nome: "Vila Marcão", distrito: true },
+      { nome: "Nova Geaza", distrito: true },
+      { nome: "Filadélfia", distrito: true },
+      { nome: "São Luiz", distrito: true },
+      { nome: "Santo Antônio", distrito: true },
+      { nome: "Izidolândia", distrito: true },
+      { nome: "São Luis", aldeia: true },
+      { nome: "Serrinha", aldeia: true },
+      { nome: "Jatobá", aldeia: true }
     ]
   },
   {
@@ -487,11 +487,11 @@ function renderCards() {
     const cidadesHTML = f.cidades.map((c, ci) => {
       const id = `addr-${fi}-${ci}`;
       const hasAddr = c.addrs && c.addrs.length > 0;
-      const distritoClass = c.Distrito ? ' Distrito' : '';
-      const suffix = c.Distrito ? (c.Vila ? ' (Vila)' : ' (Distrito)') : '';
+      const distritoClass = c.distrito ? ' distrito' : '';
+      const suffix = c.distrito ? (c.vila ? ' (vila)' : ' (distrito)') : '';
 
       if (!hasAddr) {
-        return `<div class="city-row"><span class="city-tag${DistritoClass}">${c.nome}${suffix}</span></div>`;
+        return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span></div>`;
       }
 
       const addrLines = c.addrs.map(a => {
