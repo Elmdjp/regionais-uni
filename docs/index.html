@@ -487,11 +487,11 @@ function renderCards() {
     const cidadesHTML = f.cidades.map((c, ci) => {
       const id = `addr-${fi}-${ci}`;
       const hasAddr = c.addrs && c.addrs.length > 0;
-      const distritoClass = c.distrito ? ' distrito' : '';
-      const suffix = c.distrito ? (c.vila ? ' (vila)' : ' (distrito)') : '';
+      const distritoClass = c.Distrito ? ' Distrito' : '';
+      const suffix = c.Distrito ? (c.Vila ? ' (Vila)' : ' (Distrito)') : '';
 
       if (!hasAddr) {
-        return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span></div>`;
+        return `<div class="city-row"><span class="city-tag${DistritoClass}">${c.nome}${suffix}</span></div>`;
       }
 
       const addrLines = c.addrs.map(a => {
