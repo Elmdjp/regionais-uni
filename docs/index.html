@@ -282,7 +282,7 @@
     transition: all 0.2s ease;
   }
   .city-tag.distrito { font-style: italic; border-style: dashed; }
-  .city-tag.aldeia { border-color: var(--orange-border); }
+
 
   .city-tag.has-addr {
     cursor: pointer;
@@ -488,8 +488,8 @@ function renderCards() {
     const cidadesHTML = f.cidades.map((c, ci) => {
       const id = `addr-${fi}-${ci}`;
       const hasAddr = c.addrs && c.addrs.length > 0;
-      const distritoClass = c.distrito ? ' distrito' : '';
-      const suffix = c.distrito ? (c.vila ? ' (vila)' : ' (distrito)') : '';
+      const distritoClass = c.distrito ? ' distrito' : (c.aldeia ? ' aldeia' : '');
+const suffix = c.distrito ? (c.vila ? ' (vila)' : ' (distrito)') : (c.aldeia ? ' (aldeia)' : '');
 
       if (!hasAddr) {
         return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span></div>`;
