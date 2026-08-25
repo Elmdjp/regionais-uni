@@ -489,7 +489,7 @@ function renderCards() {
       const id = `addr-${fi}-${ci}`;
       const hasAddr = c.addrs && c.addrs.length > 0;
       const distritoClass = c.distrito ? ' distrito' : (c.aldeia ? ' aldeia' : '');
-const suffix = c.distrito ? (c.vila ? ' (vila)' : ' (distrito)') : (c.aldeia ? ' (aldeia)' : '');
+const suffix = c.distrito ? (c.vila ? ' (Vila)' : ' (Distrito)') : (c.aldeia ? ' (Aldeia)' : '');
 
       if (!hasAddr) {
         return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span></div>`;
