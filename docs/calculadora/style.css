@@ -1,22 +1,55 @@
 :root {
-  color-scheme: light;
-  --bg: #f4f7fb;
-  --bg-strong: #e8f1ff;
+  --bg: #0f1117;
+  --bg-strong: #161922;
+  --surface: #1a1d27;
+  --surface-raised: rgba(26, 29, 39, 0.92);
+  --surface-soft: #222632;
+  --primary: #21d9ff;
+  --primary-hover: #4ee4ff;
+  --primary-soft: rgba(33, 217, 255, 0.15);
+  --primary-ring: rgba(33, 217, 255, 0.28);
+  --primary-shadow: rgba(33, 217, 255, 0.28);
+  --grid-glow: rgba(33, 217, 255, 0.07);
+  --text: #e4e6ed;
+  --heading: #ffffff;
+  --muted: #8b90a0;
+  --border: #2a2e3a;
+  --border-strong: #3a3f4d;
+  --success: #34d399;
+  --success-bg: rgba(52, 211, 153, 0.1);
+  --success-border: rgba(52, 211, 153, 0.15);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
+  --danger-border: rgba(248, 113, 113, 0.2);
+  --warning: #fbbf24;
+  --warning-bg: rgba(251, 191, 36, 0.12);
+  --warning-border: rgba(251, 191, 36, 0.2);
+  --shadow: 0 22px 55px rgba(0, 0, 0, 0.35);
+  --shadow-soft: 0 12px 26px rgba(0, 0, 0, 0.25);
+  --shadow-strong: 0 26px 65px rgba(0, 0, 0, 0.4);
+  --radius: 14px;
+}
+
+[data-theme="light"] {
+  --bg: #f0f2f5;
+  --bg-strong: #e8ecf2;
   --surface: #ffffff;
   --surface-raised: rgba(255, 255, 255, 0.92);
-  --surface-soft: #f7faff;
-  --primary: #155ee8;
-  --primary-hover: #0f47b3;
-  --primary-soft: #e4efff;
-  --primary-ring: rgba(21, 94, 232, 0.16);
-  --text: #172033;
-  --heading: #0f172a;
-  --muted: #667085;
-  --border: #d9e2ef;
+  --surface-soft: #f5f6f8;
+  --primary: #0aafc9;
+  --primary-hover: #078da3;
+  --primary-soft: rgba(10, 175, 201, 0.1);
+  --primary-ring: rgba(10, 175, 201, 0.18);
+  --primary-shadow: rgba(10, 175, 201, 0.22);
+  --grid-glow: rgba(10, 175, 201, 0.05);
+  --text: #2d3142;
+  --heading: #1a1d27;
+  --muted: #6b7280;
+  --border: #dde1e8;
   --border-strong: #c5d2e4;
-  --success: #087f5b;
-  --success-bg: #def7ec;
-  --success-border: #9de6c8;
+  --success: #059669;
+  --success-bg: rgba(5, 150, 105, 0.07);
+  --success-border: rgba(5, 150, 105, 0.15);
   --danger: #b42318;
   --danger-bg: #fee4e2;
   --danger-border: #f7b7b2;
@@ -25,7 +58,7 @@
   --warning-border: #f4d27b;
   --shadow: 0 22px 55px rgba(15, 40, 80, 0.12);
   --shadow-soft: 0 12px 26px rgba(15, 40, 80, 0.08);
-  --radius: 8px;
+  --shadow-strong: 0 26px 65px rgba(15, 40, 80, 0.15);
 }
 
 * {
@@ -43,9 +76,47 @@ body {
     linear-gradient(180deg, var(--bg-strong) 0%, var(--bg) 44%),
     var(--bg);
   color: var(--text);
-  font-family: Inter, "Segoe UI", Arial, Helvetica, sans-serif;
+  font-family: 'Poppins', sans-serif;
   line-height: 1.5;
-  transition: background-color 0.35s ease, color 0.35s ease;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+strong,
+.currency-field input,
+input[type="text"],
+input[type="month"],
+input[type="date"] {
+  font-variant-numeric: tabular-nums;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.35s ease, border-color 0.35s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle .icon {
+  font-size: 1.1rem;
 }
 
 body::before {
@@ -54,8 +125,8 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(21, 94, 232, 0.07) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(21, 94, 232, 0.06) 1px, transparent 1px);
+    linear-gradient(90deg, var(--grid-glow) 1px, transparent 1px),
+    linear-gradient(180deg, var(--grid-glow) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
 }
@@ -205,7 +276,7 @@ button {
 
 .panel:hover {
   border-color: var(--border-strong);
-  box-shadow: 0 26px 65px rgba(15, 40, 80, 0.15);
+  box-shadow: var(--shadow-strong);
   transform: translateY(-2px);
 }
 
@@ -237,7 +308,7 @@ button {
 
 .badge {
   background: var(--primary-soft);
-  border-color: rgba(21, 94, 232, 0.12);
+  border-color: var(--primary-soft);
   color: var(--primary);
 }
 
@@ -373,7 +444,7 @@ select {
   cursor: pointer;
   font-weight: 900;
   letter-spacing: 0;
-  box-shadow: 0 15px 30px rgba(21, 94, 232, 0.28);
+  box-shadow: 0 15px 30px var(--primary-shadow);
   transition: transform 0.2s ease, box-shadow 0.22s ease, filter 0.22s ease;
 }
 
@@ -390,7 +461,7 @@ select {
 .calculate-button:hover {
   filter: brightness(1.04);
   transform: translateY(-2px);
-  box-shadow: 0 18px 34px rgba(21, 94, 232, 0.34);
+  box-shadow: 0 18px 34px var(--primary-shadow);
 }
 
 .calculate-button:active {
@@ -444,9 +515,9 @@ select {
   padding: 24px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius);
-  background: linear-gradient(135deg, #0f47b3, #155ee8);
+  background: linear-gradient(135deg, var(--primary-hover), var(--primary));
   color: #ffffff;
-  box-shadow: 0 18px 34px rgba(21, 94, 232, 0.24);
+  box-shadow: 0 18px 34px var(--primary-shadow);
   transition: background 0.35s ease, box-shadow 0.35s ease;
 }
 

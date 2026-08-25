@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Calculadora de acréscimos e descontos proporcionais para alteração de data de vencimento e de multa por quebra de contrato.">
   <title>Calculadora Financeira | Regionais UNI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <button class="theme-toggle" onclick="toggleTheme()" type="button">
+    <span class="icon" id="themeIcon">&#9728;&#65039;</span>
+    <span id="themeLabel">Modo Claro</span>
+  </button>
+
   <div class="page-shell">
     <header class="dashboard-header">
       <div class="header-copy">
@@ -329,6 +335,22 @@
     </footer>
   </div>
 
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        icon.textContent = '🌙';
+        label.textContent = 'Modo Escuro';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        icon.textContent = '☀️';
+        label.textContent = 'Modo Claro';
+      }
+    }
+  </script>
   <script src="tabs.js"></script>
   <script src="script.js"></script>
   <script src="contract-break.js"></script>
