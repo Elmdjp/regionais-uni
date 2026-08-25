@@ -270,7 +270,19 @@
 
   .cities-list { display: flex; flex-direction: column; gap: 6px; }
 
-  .city-row { position: relative; }
+  .city-row { position: relative; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  .maps-link {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--surface-hover); border: 1px solid var(--border);
+    text-decoration: none; font-size: 0.8rem;
+    transition: all 0.2s ease; flex-shrink: 0;
+  }
+  .maps-link:hover {
+    border-color: var(--accent); background: var(--accent-glow);
+    transform: scale(1.1);
+  }
 
   .city-tag {
     display: inline-flex; align-items: center; gap: 6px;
@@ -301,6 +313,7 @@
   }
 
   .addr-panel {
+    flex-basis: 100%; width: 100%;
     max-height: 0; overflow: hidden;
     transition: max-height 0.35s ease, padding 0.35s ease, opacity 0.25s ease;
     opacity: 0;
@@ -358,7 +371,7 @@
   <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Supervisor Comercial</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Supervisor Operacional</div>
   <div class="legend-item"><span style="font-size:0.85rem">📍</span> Clique na cidade para ver o endereço</div>
-  <div class="legend-item"><div class="legend-line"></div> Distrito / Vila / Aldeia</div>
+  <div class="legend-item"><div class="legend-line"></div> distrito / vila</div>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -456,17 +469,17 @@ const filiais = [
     cidades: [
       { nome: "Alta Floresta D'Oeste", addrs: [{ end: "Av. Brasil, 4122 - Centro - CEP 76954-000" }] },
       { nome: "Alto Alegre dos Parecis", addrs: [{ end: "Av. Tancredo Neves, 3957 - Centro - CEP 76952-000" }] },
-      { nome: "Porto Rolim do Guaporé", distrito: true },
-      { nome: "Flor da Serra", distrito: true },
-      { nome: "Vila Marcão", distrito: true },
-      { nome: "Nova Geaza", distrito: true },
-      { nome: "Filadélfia", distrito: true },
-      { nome: "São Luiz", distrito: true },
-      { nome: "Santo Antônio", distrito: true },
-      { nome: "Izidolândia", distrito: true },
-      { nome: "São Luis", aldeia: true },
-      { nome: "Serrinha", aldeia: true },
-      { nome: "Jatobá", aldeia: true }
+      { nome: "Porto Rolim do Guaporé", distrito: true, coords: { lat: -13.082662568611886, lng: -62.27765015218594 } },
+      { nome: "Flor da Serra", distrito: true, coords: { lat: -12.45814097354041, lng: -61.91597268397865 } },
+      { nome: "Vila Marcão", distrito: true, coords: { lat: -12.131928874544526, lng: -61.992563963387276 } },
+      { nome: "Nova Geaza", distrito: true, coords: { lat: -11.919807043248976, lng: -62.316585070080436 } },
+      { nome: "Filadélfia", distrito: true, coords: { lat: -12.437128377466966, lng: -62.044181685642734 } },
+      { nome: "São Luiz", distrito: true, coords: { lat: -12.673640428203525, lng: -61.94656436825894 } },
+      { nome: "Santo Antônio", distrito: true, coords: { lat: -12.0875977636009, lng: -62.105479083911476 } },
+      { nome: "Izidolândia", distrito: true, coords: { lat: -12.604709074994528, lng: -62.17565385559942 } },
+      { nome: "São Luis", aldeia: true, coords: { lat: -12.005116485630248, lng: -62.48762833612213 } },
+      { nome: "Serrinha", aldeia: true, coords: { lat: -12.082446949064465, lng: -62.601808815734394 } },
+      { nome: "Jatobá", aldeia: true, coords: { lat: -12.194613387045633, lng: -62.60859680355927 } }
     ]
   },
   {
@@ -489,8 +502,12 @@ function renderCards() {
       const distritoClass = c.distrito ? ' distrito' : (c.aldeia ? ' aldeia' : '');
 const suffix = c.distrito ? (c.vila ? ' (Vila)' : ' (Distrito)') : (c.aldeia ? ' (Aldeia)' : '');
 
+      const mapsLinkHTML = c.coords
+        ? `<a class="maps-link" href="https://www.google.com/maps?q=${c.coords.lat},${c.coords.lng}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`
+        : '';
+
       if (!hasAddr) {
-        return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span></div>`;
+        return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span>${mapsLinkHTML}</div>`;
       }
 
       const addrLines = c.addrs.map(a => {
@@ -501,7 +518,7 @@ const suffix = c.distrito ? (c.vila ? ' (Vila)' : ' (Distrito)') : (c.aldeia ? '
       return `<div class="city-row">
         <span class="city-tag has-addr${distritoClass}" onclick="toggleAddr('${id}', this)">
           <span class="pin">📍</span>${c.nome}${suffix}<span class="arrow">▼</span>
-        </span>
+        </span>${mapsLinkHTML}
         <div class="addr-panel" id="${id}">${addrLines}</div>
       </div>`;
     }).join('');
