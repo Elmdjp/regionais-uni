@@ -74,13 +74,13 @@ function validateConsumptionDates(cancellationDate, nextInvoiceDate) {
     return 'Informe a data de cancelamento e a data do próximo boleto.';
   }
 
-  const daysRemaining = getCommercialDayDifference(cancellationDate, nextInvoiceDate);
+  const daysUntilInvoice = getCommercialDayDifference(cancellationDate, nextInvoiceDate);
 
-  if (daysRemaining < 0) {
-    return 'A data do próximo boleto não pode ser anterior à data de cancelamento.';
+  if (daysUntilInvoice < 1) {
+    return 'A data do próximo boleto deve ser posterior à data de cancelamento.';
   }
 
-  if (daysRemaining > 30) {
+  if (daysUntilInvoice > 30) {
     return 'A data do próximo boleto deve estar dentro do ciclo atual (até 30 dias após o cancelamento).';
   }
 
@@ -161,8 +161,11 @@ consumptionForm.addEventListener('submit', (event) => {
 
   consumptionCheckboxError.textContent = '';
 
-  const daysRemaining = getCommercialDayDifference(cancellationDate, nextInvoiceDate);
-  const daysConsumed = 30 - daysRemaining;
+  // Regra de negócio: o dia da solicitação de cancelamento conta como consumido,
+  // e o dia do próximo boleto não conta (ele já é o primeiro dia do próximo ciclo).
+  const daysUntilInvoice = getCommercialDayDifference(cancellationDate, nextInvoiceDate);
+  const daysConsumed = 30 - daysUntilInvoice + 1;
+  const daysRemaining = daysUntilInvoice - 1;
   const dailyValue = monthlyFee / 30;
   const proportionalAmount = dailyValue * daysConsumed;
 
