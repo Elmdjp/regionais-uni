@@ -346,6 +346,14 @@ button {
   gap: 16px;
 }
 
+.form-row-aligned-labels {
+  align-items: end;
+}
+
+.form-row-aligned-labels label {
+  min-height: 2.7rem;
+}
+
 label {
   display: block;
   margin-bottom: 8px;
