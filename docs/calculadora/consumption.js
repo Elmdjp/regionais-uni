@@ -1,11 +1,15 @@
 const consumptionForm = document.getElementById('consumption-form');
 const consumptionMonthlyFeeInput = document.getElementById('consumption-monthly-fee');
+const consumptionMatchYesRadio = document.getElementById('consumption-match-yes');
+const consumptionMatchNoRadio = document.getElementById('consumption-match-no');
+const consumptionRequestDates = document.getElementById('consumption-request-dates');
+const consumptionManualDates = document.getElementById('consumption-manual-dates');
 const cancellationDateInput = document.getElementById('cancellation-date');
 const nextInvoiceDateInput = document.getElementById('next-invoice-date');
-const consumptionConfirmCheckbox = document.getElementById('consumption-confirm-checkbox');
+const lastDueDateInput = document.getElementById('last-due-date');
+const lastConsumptionDateInput = document.getElementById('last-consumption-date');
 const consumptionMonthlyFeeError = document.getElementById('consumption-monthly-fee-error');
 const consumptionDateError = document.getElementById('consumption-date-error');
-const consumptionCheckboxError = document.getElementById('consumption-checkbox-error');
 
 const consumptionEmptyState = document.getElementById('consumption-empty-state');
 const consumptionResultContent = document.getElementById('consumption-result-content');
@@ -15,9 +19,14 @@ const consumptionFinalValueEl = document.getElementById('consumption-final-value
 const consumptionResultMessageEl = document.getElementById('consumption-result-message');
 
 const consumptionSummaryMonthlyFee = document.getElementById('consumption-summary-monthly-fee');
+const consumptionSummaryStartIcon = document.getElementById('consumption-summary-start-icon');
+const consumptionSummaryStartLabel = document.getElementById('consumption-summary-start-label');
 const consumptionSummaryCancellationDate = document.getElementById('consumption-summary-cancellation-date');
+const consumptionSummaryEndIcon = document.getElementById('consumption-summary-end-icon');
+const consumptionSummaryEndLabel = document.getElementById('consumption-summary-end-label');
 const consumptionSummaryNextInvoiceDate = document.getElementById('consumption-summary-next-invoice-date');
 const consumptionSummaryDaysConsumed = document.getElementById('consumption-summary-days-consumed');
+const consumptionSummaryRemainingLabel = document.getElementById('consumption-summary-remaining-label');
 const consumptionSummaryDaysRemaining = document.getElementById('consumption-summary-days-remaining');
 const consumptionSummaryDailyValue = document.getElementById('consumption-summary-daily-value');
 const consumptionSummaryFinalValue = document.getElementById('consumption-summary-final-value');
@@ -57,6 +66,17 @@ function getCommercialDayDifference(fromDate, toDate) {
   return (monthDifference * 30) + (toDate.day - fromDate.day);
 }
 
+function getConsumptionBranch() {
+  return consumptionMatchNoRadio.checked ? 'no' : 'yes';
+}
+
+function updateConsumptionBranchVisibility() {
+  const branch = getConsumptionBranch();
+  consumptionRequestDates.classList.toggle('hidden', branch !== 'yes');
+  consumptionManualDates.classList.toggle('hidden', branch !== 'no');
+  consumptionDateError.textContent = '';
+}
+
 function validateConsumptionMonthlyFee(monthlyFee) {
   if (!consumptionMonthlyFeeInput.value.trim()) {
     return 'Informe o valor da mensalidade.';
@@ -69,36 +89,51 @@ function validateConsumptionMonthlyFee(monthlyFee) {
   return '';
 }
 
-function validateConsumptionDates(cancellationDate, nextInvoiceDate) {
+// Ramo "Sim": a data da solicitação é o último dia consumido (conta), e o
+// próximo boleto marca o fim do ciclo de 30 dias (não conta).
+function validateRequestDates(cancellationDate, nextInvoiceDate) {
   if (!cancellationDate || !nextInvoiceDate) {
-    return 'Informe a data de cancelamento e a data do próximo boleto.';
+    return 'Informe a data da solicitação e a data do próximo boleto.';
   }
 
   const daysUntilInvoice = getCommercialDayDifference(cancellationDate, nextInvoiceDate);
 
   if (daysUntilInvoice < 1) {
-    return 'A data do próximo boleto deve ser posterior à data de cancelamento.';
+    return 'A data do próximo boleto deve ser posterior à data da solicitação.';
   }
 
   if (daysUntilInvoice > 30) {
-    return 'A data do próximo boleto deve estar dentro do ciclo atual (até 30 dias após o cancelamento).';
+    return 'A data do próximo boleto deve estar dentro do ciclo atual (até 30 dias após a solicitação).';
   }
 
   return '';
 }
 
-function validateConsumptionCheckbox() {
-  if (!consumptionConfirmCheckbox.checked) {
-    return 'Confirme que o período condiz com o consumo real do cliente antes de continuar.';
+// Ramo "Não": o último vencimento realizado é o início do ciclo (conta), e o
+// último dia de consumo é o último dia efetivamente usado (também conta).
+function validateManualDates(lastDueDate, lastConsumptionDate) {
+  if (!lastDueDate || !lastConsumptionDate) {
+    return 'Informe o último vencimento realizado e o último dia de consumo.';
+  }
+
+  const daysSinceDueDate = getCommercialDayDifference(lastDueDate, lastConsumptionDate);
+
+  if (daysSinceDueDate < 0) {
+    return 'O último dia de consumo não pode ser anterior ao último vencimento realizado.';
+  }
+
+  if (daysSinceDueDate > 29) {
+    return 'O último dia de consumo deve estar dentro do ciclo atual (até 30 dias após o último vencimento).';
   }
 
   return '';
 }
 
 function renderConsumptionResult({
+  branch,
   monthlyFee,
-  cancellationDate,
-  nextInvoiceDate,
+  startDate,
+  endDate,
   daysConsumed,
   daysRemaining,
   dailyValue,
@@ -114,12 +149,28 @@ function renderConsumptionResult({
 
   consumptionHighlightLabel.textContent = 'Valor proporcional de consumo';
   consumptionFinalValueEl.textContent = formatCurrency(proportionalAmount);
+
+  const originNote = branch === 'yes' ? 'data da solicitação' : 'período informado manualmente';
   consumptionResultMessageEl.textContent =
-    `O cliente consumiu ${daysConsumed} ${daysConsumed === 1 ? 'dia' : 'dias'} do ciclo atual, equivalente a ${formatCurrency(proportionalAmount)}.`;
+    `O cliente consumiu ${daysConsumed} ${daysConsumed === 1 ? 'dia' : 'dias'} do ciclo atual (${originNote}), equivalente a ${formatCurrency(proportionalAmount)}.`;
+
+  if (branch === 'yes') {
+    consumptionSummaryStartIcon.textContent = 'CA';
+    consumptionSummaryStartLabel.textContent = 'Cancelamento';
+    consumptionSummaryEndIcon.textContent = 'PB';
+    consumptionSummaryEndLabel.textContent = 'Próximo boleto';
+    consumptionSummaryRemainingLabel.textContent = 'Dias restantes até o boleto';
+  } else {
+    consumptionSummaryStartIcon.textContent = 'UV';
+    consumptionSummaryStartLabel.textContent = 'Último vencimento realizado';
+    consumptionSummaryEndIcon.textContent = 'UC';
+    consumptionSummaryEndLabel.textContent = 'Último dia de consumo';
+    consumptionSummaryRemainingLabel.textContent = 'Dias não consumidos no ciclo';
+  }
 
   consumptionSummaryMonthlyFee.textContent = formatCurrency(monthlyFee);
-  consumptionSummaryCancellationDate.textContent = formatFullDate(cancellationDate);
-  consumptionSummaryNextInvoiceDate.textContent = formatFullDate(nextInvoiceDate);
+  consumptionSummaryCancellationDate.textContent = formatFullDate(startDate);
+  consumptionSummaryNextInvoiceDate.textContent = formatFullDate(endDate);
   consumptionSummaryDaysConsumed.textContent = `${daysConsumed} ${daysConsumed === 1 ? 'dia' : 'dias'}`;
   consumptionSummaryDaysRemaining.textContent = `${daysRemaining} ${daysRemaining === 1 ? 'dia' : 'dias'}`;
   consumptionSummaryDailyValue.textContent = formatCurrency(dailyValue);
@@ -131,9 +182,6 @@ consumptionForm.addEventListener('submit', (event) => {
 
   const monthlyFee = parseBrazilianCurrency(consumptionMonthlyFeeInput.value);
   const monthlyFeeValidationMessage = validateConsumptionMonthlyFee(monthlyFee);
-  const cancellationDate = parseFullDate(cancellationDateInput.value);
-  const nextInvoiceDate = parseFullDate(nextInvoiceDateInput.value);
-  const dateValidationMessage = validateConsumptionDates(cancellationDate, nextInvoiceDate);
 
   if (monthlyFeeValidationMessage) {
     consumptionMonthlyFeeError.textContent = monthlyFeeValidationMessage;
@@ -143,36 +191,56 @@ consumptionForm.addEventListener('submit', (event) => {
 
   consumptionMonthlyFeeError.textContent = '';
 
-  if (dateValidationMessage) {
-    consumptionDateError.textContent = dateValidationMessage;
-    cancellationDateInput.focus();
-    return;
+  const branch = getConsumptionBranch();
+  const dailyValue = monthlyFee / 30;
+  let startDate;
+  let endDate;
+  let daysConsumed;
+  let daysRemaining;
+
+  if (branch === 'yes') {
+    const cancellationDate = parseFullDate(cancellationDateInput.value);
+    const nextInvoiceDate = parseFullDate(nextInvoiceDateInput.value);
+    const dateValidationMessage = validateRequestDates(cancellationDate, nextInvoiceDate);
+
+    if (dateValidationMessage) {
+      consumptionDateError.textContent = dateValidationMessage;
+      cancellationDateInput.focus();
+      return;
+    }
+
+    const daysUntilInvoice = getCommercialDayDifference(cancellationDate, nextInvoiceDate);
+    startDate = cancellationDate;
+    endDate = nextInvoiceDate;
+    daysConsumed = 30 - daysUntilInvoice + 1;
+    daysRemaining = daysUntilInvoice - 1;
+  } else {
+    const lastDueDate = parseFullDate(lastDueDateInput.value);
+    const lastConsumptionDate = parseFullDate(lastConsumptionDateInput.value);
+    const dateValidationMessage = validateManualDates(lastDueDate, lastConsumptionDate);
+
+    if (dateValidationMessage) {
+      consumptionDateError.textContent = dateValidationMessage;
+      lastDueDateInput.focus();
+      return;
+    }
+
+    const daysSinceDueDate = getCommercialDayDifference(lastDueDate, lastConsumptionDate);
+    startDate = lastDueDate;
+    endDate = lastConsumptionDate;
+    daysConsumed = daysSinceDueDate + 1;
+    daysRemaining = 30 - daysConsumed;
   }
 
   consumptionDateError.textContent = '';
 
-  const checkboxValidationMessage = validateConsumptionCheckbox();
-
-  if (checkboxValidationMessage) {
-    consumptionCheckboxError.textContent = checkboxValidationMessage;
-    consumptionConfirmCheckbox.focus();
-    return;
-  }
-
-  consumptionCheckboxError.textContent = '';
-
-  // Regra de negócio: o dia da solicitação de cancelamento conta como consumido,
-  // e o dia do próximo boleto não conta (ele já é o primeiro dia do próximo ciclo).
-  const daysUntilInvoice = getCommercialDayDifference(cancellationDate, nextInvoiceDate);
-  const daysConsumed = 30 - daysUntilInvoice + 1;
-  const daysRemaining = daysUntilInvoice - 1;
-  const dailyValue = monthlyFee / 30;
   const proportionalAmount = dailyValue * daysConsumed;
 
   renderConsumptionResult({
+    branch,
     monthlyFee,
-    cancellationDate,
-    nextInvoiceDate,
+    startDate,
+    endDate,
     daysConsumed,
     daysRemaining,
     dailyValue,
@@ -184,14 +252,14 @@ consumptionMonthlyFeeInput.addEventListener('input', () => {
   consumptionMonthlyFeeError.textContent = '';
 });
 
-cancellationDateInput.addEventListener('input', () => {
-  consumptionDateError.textContent = '';
+[cancellationDateInput, nextInvoiceDateInput, lastDueDateInput, lastConsumptionDateInput].forEach((input) => {
+  input.addEventListener('input', () => {
+    consumptionDateError.textContent = '';
+  });
 });
 
-nextInvoiceDateInput.addEventListener('input', () => {
-  consumptionDateError.textContent = '';
+[consumptionMatchYesRadio, consumptionMatchNoRadio].forEach((radio) => {
+  radio.addEventListener('change', updateConsumptionBranchVisibility);
 });
 
-consumptionConfirmCheckbox.addEventListener('change', () => {
-  consumptionCheckboxError.textContent = '';
-});
+updateConsumptionBranchVisibility();

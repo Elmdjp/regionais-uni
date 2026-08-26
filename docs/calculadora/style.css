@@ -430,32 +430,59 @@ select {
   cursor: pointer;
 }
 
-.checkbox-group {
+.radio-group {
   margin-top: 4px;
 }
 
-.checkbox-label {
+.radio-group-label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.radio-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-option {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin-bottom: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
   color: var(--text);
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
+  transition: border-color 0.2s ease, background 0.35s ease;
 }
 
-input[type="checkbox"] {
+.radio-option:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
   width: 20px;
   min-height: 0;
   height: 20px;
   margin-top: 1px;
   padding: 0;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
   accent-color: var(--primary);
   cursor: pointer;
   flex-shrink: 0;
+}
+
+input[type="checkbox"] {
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
 }
 
 .error-message {
