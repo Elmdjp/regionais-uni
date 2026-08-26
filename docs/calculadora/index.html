@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Calculadora de acréscimos e descontos proporcionais para alteração de data de vencimento e de multa por quebra de contrato.">
+  <meta name="description" content="Calculadora de acréscimos e descontos proporcionais para alteração de data de vencimento, multa por quebra de contrato e proporcional de consumo.">
   <title>Calculadora Financeira | Regionais UNI</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -22,7 +22,7 @@
         </a>
         <span class="eyebrow">Dashboard financeira</span>
         <h1>Calculadora Financeira</h1>
-        <p>Calcule acréscimos/descontos por mudança de vencimento ou a multa por quebra de contrato.</p>
+        <p>Calcule acréscimos/descontos por mudança de vencimento, multa por quebra de contrato ou o proporcional de consumo em cancelamentos.</p>
       </div>
     </header>
 
@@ -32,6 +32,9 @@
       </button>
       <button type="button" class="tab-button" data-tab="contract-break" role="tab" aria-selected="false" aria-controls="panel-contract-break">
         Quebra de contrato
+      </button>
+      <button type="button" class="tab-button" data-tab="consumption" role="tab" aria-selected="false" aria-controls="panel-consumption">
+        Proporcional de consumo
       </button>
     </div>
 
@@ -330,8 +333,138 @@
       </section>
     </main>
 
+    <main class="dashboard-grid hidden" id="panel-consumption" data-tab-panel="consumption">
+      <section class="panel input-panel" aria-labelledby="consumption-form-title">
+        <div class="panel-heading">
+          <div>
+            <span class="section-label">Dados do consumo</span>
+            <h2 id="consumption-form-title">Informações para cálculo</h2>
+          </div>
+          <span class="badge">Mês comercial: 30 dias</span>
+        </div>
+
+        <form id="consumption-form" novalidate>
+          <div class="form-group">
+            <label for="consumption-monthly-fee">Valor da mensalidade</label>
+            <div class="currency-field">
+              <span>R$</span>
+              <input
+                type="text"
+                id="consumption-monthly-fee"
+                name="consumptionMonthlyFee"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="100,00"
+                aria-describedby="consumption-monthly-fee-error"
+              >
+            </div>
+            <small id="consumption-monthly-fee-error" class="error-message" aria-live="polite"></small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cancellation-date">Data da solicitação de cancelamento</label>
+              <input
+                type="date"
+                id="cancellation-date"
+                name="cancellationDate"
+                aria-describedby="consumption-date-error"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="next-invoice-date">Data do próximo boleto</label>
+              <input
+                type="date"
+                id="next-invoice-date"
+                name="nextInvoiceDate"
+                aria-describedby="consumption-date-error"
+                required
+              >
+            </div>
+          </div>
+          <small id="consumption-date-error" class="error-message" aria-live="polite"></small>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label" for="consumption-confirm-checkbox">
+              <input type="checkbox" id="consumption-confirm-checkbox" name="consumptionConfirm" required>
+              <span>O período listado acima para cálculo condiz com o consumo real do cliente. Em caso de dúvida, realizar a checagem do histórico de consumo antes de dar continuidade.</span>
+            </label>
+            <small id="consumption-checkbox-error" class="error-message" aria-live="polite"></small>
+          </div>
+
+          <button type="submit" class="calculate-button">
+            <span aria-hidden="true">%</span>
+            Calcular proporcional
+          </button>
+        </form>
+      </section>
+
+      <section class="panel result-panel" aria-labelledby="consumption-result-title">
+        <div class="panel-heading">
+          <div>
+            <span class="section-label">Resultado</span>
+            <h2 id="consumption-result-title">Resumo do proporcional</h2>
+          </div>
+          <span id="consumption-result-status" class="status-pill status-neutral">Aguardando</span>
+        </div>
+
+        <div id="consumption-empty-state" class="empty-state">
+          <div class="empty-icon" aria-hidden="true">%</div>
+          <p>Informe a mensalidade, a data de cancelamento e a data do próximo boleto para visualizar o proporcional de consumo.</p>
+        </div>
+
+        <div id="consumption-result-content" class="result-content hidden" aria-live="polite">
+          <div class="highlight-box">
+            <span id="consumption-highlight-label">Valor proporcional de consumo</span>
+            <strong id="consumption-final-value">R$ 0,00</strong>
+            <p id="consumption-result-message">Nenhum cálculo realizado.</p>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">R$</span>
+              <span>Valor da mensalidade</span>
+              <strong id="consumption-summary-monthly-fee">R$ 0,00</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">CA</span>
+              <span>Cancelamento</span>
+              <strong id="consumption-summary-cancellation-date">-</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">PB</span>
+              <span>Próximo boleto</span>
+              <strong id="consumption-summary-next-invoice-date">-</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">DC</span>
+              <span>Dias consumidos</span>
+              <strong id="consumption-summary-days-consumed">0 dias</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">DR</span>
+              <span>Dias restantes até o boleto</span>
+              <strong id="consumption-summary-days-remaining">0 dias</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-icon" aria-hidden="true">/30</span>
+              <span>Valor diário</span>
+              <strong id="consumption-summary-daily-value">R$ 0,00</strong>
+            </div>
+            <div class="summary-item full-width">
+              <span class="summary-icon" aria-hidden="true">VF</span>
+              <span>Valor proporcional de consumo</span>
+              <strong id="consumption-summary-final-value">R$ 0,00</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
     <footer class="dashboard-footer">
-      Dashboard desenvolvida para cálculo proporcional de vencimento e de quebra de contrato
+      Dashboard desenvolvida para cálculo proporcional de vencimento, quebra de contrato e proporcional de consumo
     </footer>
   </div>
 
@@ -354,5 +487,6 @@
   <script src="tabs.js"></script>
   <script src="script.js"></script>
   <script src="contract-break.js"></script>
+  <script src="consumption.js"></script>
 </body>
 </html>
