@@ -324,11 +324,14 @@
     padding: 0 14px;
   }
   .addr-panel.open {
-    max-height: 200px; opacity: 1; padding: 10px 14px;
+    max-height: 320px; opacity: 1; padding: 10px 14px;
   }
   .addr-panel .addr-line {
     display: flex; align-items: flex-start; gap: 8px;
     font-size: 0.76rem; color: var(--text-muted); line-height: 1.5;
+  }
+  .addr-panel .addr-line .maps-link {
+    width: 20px; height: 20px; font-size: 0.7rem; margin-left: auto;
   }
   .addr-panel .addr-line + .addr-line { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
   .addr-panel .addr-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 1px; }
@@ -384,8 +387,10 @@ const filiais = [
     cidades: [
       { nome: "Ji-Paraná", addrs: [
         { label: "Matriz", end: "Av. Marechal Rondon, 1758 - Centro - CEP 76900-136" },
-        { label: "Filial", end: "Rua Manoel Franco, 809 - Nova Brasília - CEP 76908-442" }
-      ]}
+        { label: "Filial", end: "Rua Manoel Franco, 809 - Nova Brasília - CEP 76908-442" },
+        { end: "R. Menezes Filho, 2231 - 2 de Abril, Ji-Paraná - RO, 76900-801", maps: "https://maps.app.goo.gl/e4gf7hHd4zTG21sa7" }
+      ]},
+      { nome: "Ikoloehj - Terra Indígena Igarapé Lourdes", aldeia: true, mapsUrl: "https://maps.app.goo.gl/1orMHaBpAMKndJzm6" }
     ]
   },
   {
@@ -502,8 +507,9 @@ function renderCards() {
       const distritoClass = c.distrito ? ' distrito' : (c.aldeia ? ' aldeia' : '');
 const suffix = c.distrito ? (c.vila ? ' (Vila)' : ' (Distrito)') : (c.aldeia ? ' (Aldeia)' : '');
 
-      const mapsLinkHTML = c.coords
-        ? `<a class="maps-link" href="https://www.google.com/maps?q=${c.coords.lat},${c.coords.lng}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`
+      const mapsHref = c.mapsUrl || (c.coords ? `https://www.google.com/maps?q=${c.coords.lat},${c.coords.lng}` : null);
+      const mapsLinkHTML = mapsHref
+        ? `<a class="maps-link" href="${mapsHref}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`
         : '';
 
       if (!hasAddr) {
@@ -512,7 +518,10 @@ const suffix = c.distrito ? (c.vila ? ' (Vila)' : ' (Distrito)') : (c.aldeia ? '
 
       const addrLines = c.addrs.map(a => {
         const labelHTML = a.label ? `<div class="addr-label">${a.label}</div>` : '';
-        return `<div class="addr-line"><span class="addr-icon">📍</span><div>${labelHTML}${a.end}</div></div>`;
+        const addrMapsHTML = a.maps
+          ? `<a class="maps-link" href="${a.maps}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`
+          : '';
+        return `<div class="addr-line"><span class="addr-icon">📍</span><div>${labelHTML}${a.end}</div>${addrMapsHTML}</div>`;
       }).join('');
 
       return `<div class="city-row">
