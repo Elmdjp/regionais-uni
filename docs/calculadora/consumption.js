@@ -109,21 +109,21 @@ function validateRequestDates(cancellationDate, nextInvoiceDate) {
   return '';
 }
 
-// Ramo "Não": o último vencimento realizado é o início do ciclo (conta), e o
+// Ramo "Não": a data do último boleto pago é o início do ciclo (conta), e o
 // último dia de consumo é o último dia efetivamente usado (também conta).
 function validateManualDates(lastDueDate, lastConsumptionDate) {
   if (!lastDueDate || !lastConsumptionDate) {
-    return 'Informe o último vencimento realizado e o último dia de consumo.';
+    return 'Informe a data do último boleto pago e o último dia de consumo.';
   }
 
   const daysSinceDueDate = getCommercialDayDifference(lastDueDate, lastConsumptionDate);
 
   if (daysSinceDueDate < 0) {
-    return 'O último dia de consumo não pode ser anterior ao último vencimento realizado.';
+    return 'O último dia de consumo não pode ser anterior à data do último boleto pago.';
   }
 
   if (daysSinceDueDate > 29) {
-    return 'O último dia de consumo deve estar dentro do ciclo atual (até 30 dias após o último vencimento).';
+    return 'O último dia de consumo deve estar dentro do ciclo atual (até 30 dias após o último boleto pago).';
   }
 
   return '';
@@ -161,8 +161,8 @@ function renderConsumptionResult({
     consumptionSummaryEndLabel.textContent = 'Próximo boleto';
     consumptionSummaryRemainingLabel.textContent = 'Dias restantes até o boleto';
   } else {
-    consumptionSummaryStartIcon.textContent = 'UV';
-    consumptionSummaryStartLabel.textContent = 'Último vencimento realizado';
+    consumptionSummaryStartIcon.textContent = 'UB';
+    consumptionSummaryStartLabel.textContent = 'Data do último boleto pago';
     consumptionSummaryEndIcon.textContent = 'UC';
     consumptionSummaryEndLabel.textContent = 'Último dia de consumo';
     consumptionSummaryRemainingLabel.textContent = 'Dias não consumidos no ciclo';
