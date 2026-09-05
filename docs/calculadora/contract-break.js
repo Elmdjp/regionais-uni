@@ -214,9 +214,7 @@ const clearContractButton = document.getElementById('clear-contract');
 
 if (clearContractButton) {
   clearContractButton.addEventListener('click', () => {
-    contractValueSelect.value = '790';
     customContractValueInput.value = '';
-    customValueGroup.classList.add('hidden');
     contractValueError.textContent = '';
 
     signingDateInput.value = '';
