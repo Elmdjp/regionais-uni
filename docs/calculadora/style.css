@@ -27,7 +27,35 @@
   --shadow: 0 22px 55px rgba(0, 0, 0, 0.35);
   --shadow-soft: 0 12px 26px rgba(0, 0, 0, 0.25);
   --shadow-strong: 0 26px 65px rgba(0, 0, 0, 0.4);
+
+  /* Escala de espaçamento — use sempre um destes valores em
+     gap / padding / margin. Evite números "soltos" fora daqui. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Raio — um raio de "superfície" e um único raio de "pílula". */
+  --radius-sm: 8px;
   --radius: 14px;
+  --radius-pill: 999px;
+
+  /* Escala tipográfica — 6 degraus, nada fora daqui. */
+  --fs-2xs: 0.75rem;   /* 12px — badges, eyebrow, mensagens de erro */
+  --fs-xs: 0.875rem;   /* 14px — labels, texto secundário, abas */
+  --fs-sm: 1rem;       /* 16px — corpo de texto */
+  --fs-md: 1.125rem;   /* 18px — subtítulos (panel-heading h2) */
+  --fs-lg: 1.5rem;     /* 24px — destaques secundários */
+  --fs-xl: clamp(2rem, 4vw, 3.35rem);        /* título principal */
+  --fs-display: clamp(2.15rem, 5vw, 3.25rem); /* número em destaque */
+
+  /* Tamanhos padronizados de ícone/chip circular. */
+  --icon-sm: 28px;
+  --icon-md: 40px;
+  --icon-lg: 72px;
 }
 
 [data-theme="light"] {
@@ -77,6 +105,7 @@ body {
     var(--bg);
   color: var(--text);
   font-family: 'Poppins', sans-serif;
+  font-size: var(--fs-sm);
   line-height: 1.5;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
@@ -91,19 +120,19 @@ input[type="date"] {
 
 .theme-toggle {
   position: fixed;
-  top: 20px;
-  right: 24px;
+  top: var(--space-5);
+  right: var(--space-5);
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
   border: 1px solid var(--border);
-  border-radius: 50px;
+  border-radius: var(--radius-pill);
   background: var(--surface);
   color: var(--text);
   font-family: 'Poppins', sans-serif;
-  font-size: 0.8rem;
+  font-size: var(--fs-2xs);
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
@@ -116,7 +145,7 @@ input[type="date"] {
 }
 
 .theme-toggle .icon {
-  font-size: 1.1rem;
+  font-size: var(--fs-md);
 }
 
 body::before {
@@ -143,17 +172,17 @@ button {
 
 .page-shell {
   position: relative;
-  width: min(1180px, calc(100% - 32px));
+  width: min(1180px, calc(100% - var(--space-6)));
   margin: 0 auto;
-  padding: 38px 0 24px;
+  padding: var(--space-7) 0 var(--space-5);
 }
 
 .dashboard-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
-  padding: 28px 0 26px;
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
 }
 
 .header-copy {
@@ -164,20 +193,20 @@ button {
 .section-label {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   color: var(--primary);
-  font-size: 0.76rem;
+  font-size: var(--fs-2xs);
   font-weight: 800;
   letter-spacing: 0.08em;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
   text-transform: uppercase;
 }
 
 .eyebrow::before,
 .section-label::before {
   content: "";
-  width: 8px;
-  height: 8px;
+  width: var(--space-2);
+  height: var(--space-2);
   border-radius: 50%;
   background: var(--primary);
   box-shadow: 0 0 0 4px var(--primary-soft);
@@ -186,30 +215,30 @@ button {
 .dashboard-header h1 {
   margin: 0;
   color: var(--heading);
-  font-size: clamp(2rem, 4vw, 3.35rem);
+  font-size: var(--fs-xl);
   letter-spacing: 0;
   line-height: 1.05;
 }
 
 .dashboard-header p {
   max-width: 690px;
-  margin: 15px 0 0;
+  margin: var(--space-4) 0 0;
   color: var(--muted);
-  font-size: 1.08rem;
+  font-size: var(--fs-md);
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
-  padding: 10px 20px;
-  border-radius: 50px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
   border: 1px solid var(--primary);
   background: var(--primary);
   color: #fff;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: var(--fs-xs);
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -222,14 +251,14 @@ button {
 
 .back-link .icon {
   font-weight: 800;
-  font-size: 1rem;
+  font-size: var(--fs-sm);
 }
 
 .tab-bar {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  padding: 6px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding: var(--space-1);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-soft);
@@ -237,12 +266,12 @@ button {
 }
 
 .tab-button {
-  border-radius: calc(var(--radius) - 2px);
-  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
   background: transparent;
   color: var(--muted);
   font-weight: 800;
-  font-size: 0.92rem;
+  font-size: var(--fs-xs);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -260,7 +289,7 @@ button {
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
-  gap: 24px;
+  gap: var(--space-5);
   align-items: start;
 }
 
@@ -269,7 +298,7 @@ button {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 26px;
+  padding: var(--space-5);
   backdrop-filter: blur(14px);
   transition: transform 0.22s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.35s ease;
 }
@@ -284,14 +313,14 @@ button {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 24px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 
 .panel-heading h2 {
   margin: 0;
   color: var(--heading);
-  font-size: 1.28rem;
+  font-size: var(--fs-md);
   line-height: 1.2;
 }
 
@@ -299,10 +328,10 @@ button {
 .status-pill {
   flex: 0 0 auto;
   border: 1px solid transparent;
-  border-radius: 999px;
-  font-size: 0.76rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-2xs);
   font-weight: 800;
-  padding: 8px 11px;
+  padding: var(--space-2) var(--space-3);
   white-space: nowrap;
 }
 
@@ -337,13 +366,13 @@ button {
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .form-row-aligned-labels {
@@ -356,9 +385,9 @@ button {
 
 label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
   color: var(--text);
-  font-size: 0.92rem;
+  font-size: var(--fs-xs);
   font-weight: 800;
 }
 
@@ -383,7 +412,8 @@ select:focus {
   align-self: stretch;
   display: grid;
   place-items: center;
-  min-width: 56px;
+  min-width: calc(var(--icon-md) + var(--space-4));
+  padding: 0 var(--space-2);
   background: var(--surface-soft);
   border-right: 1px solid var(--border);
   color: var(--primary);
@@ -399,7 +429,7 @@ select {
   border-radius: var(--radius);
   background-color: var(--surface);
   color: var(--text);
-  padding: 0 14px;
+  padding: 0 var(--space-4);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.35s ease, color 0.35s ease;
 }
 
@@ -431,33 +461,33 @@ select {
 }
 
 .radio-group {
-  margin-top: 4px;
+  margin-top: var(--space-1);
 }
 
 .radio-group-label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-2);
   color: var(--text);
-  font-size: 0.92rem;
+  font-size: var(--fs-xs);
   font-weight: 800;
 }
 
 .radio-options {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .radio-option {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
-  font-size: 0.88rem;
+  font-size: var(--fs-xs);
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.35s ease;
@@ -470,9 +500,9 @@ select {
 
 input[type="checkbox"],
 input[type="radio"] {
-  width: 20px;
+  width: var(--space-5);
   min-height: 0;
-  height: 20px;
+  height: var(--space-5);
   margin-top: 1px;
   padding: 0;
   accent-color: var(--primary);
@@ -482,15 +512,15 @@ input[type="radio"] {
 
 input[type="checkbox"] {
   border: 1px solid var(--border-strong);
-  border-radius: 4px;
+  border-radius: var(--space-1);
 }
 
 .error-message {
   display: block;
-  min-height: 20px;
-  margin-top: 7px;
+  min-height: var(--space-5);
+  margin-top: var(--space-2);
   color: var(--danger);
-  font-size: 0.85rem;
+  font-size: var(--fs-xs);
   font-weight: 800;
 }
 
@@ -498,7 +528,7 @@ input[type="checkbox"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--space-3);
   width: 100%;
   min-height: 54px;
   border-radius: var(--radius);
@@ -513,8 +543,8 @@ input[type="checkbox"] {
 
 .calculate-button span {
   display: grid;
-  width: 26px;
-  height: 26px;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
   place-items: center;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.18);
@@ -533,14 +563,14 @@ input[type="checkbox"] {
 
 .result-panel {
   position: sticky;
-  top: 20px;
+  top: var(--space-5);
 }
 
 .empty-state {
   display: grid;
   min-height: 342px;
   place-items: center;
-  padding: 30px;
+  padding: var(--space-6);
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
   background: var(--surface-soft);
@@ -551,14 +581,14 @@ input[type="checkbox"] {
 
 .empty-icon {
   display: grid;
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 16px;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  margin: 0 auto var(--space-4);
   place-items: center;
   border-radius: 50%;
   background: var(--primary-soft);
   color: var(--primary);
-  font-size: 2rem;
+  font-size: var(--fs-lg);
   font-weight: 900;
 }
 
@@ -574,8 +604,8 @@ input[type="checkbox"] {
 .highlight-box {
   position: relative;
   overflow: hidden;
-  margin-bottom: 18px;
-  padding: 24px;
+  margin-bottom: var(--space-4);
+  padding: var(--space-5);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius);
   background: linear-gradient(135deg, var(--primary-hover), var(--primary));
@@ -587,10 +617,10 @@ input[type="checkbox"] {
 .highlight-box::after {
   content: "";
   position: absolute;
-  right: 22px;
-  top: 22px;
-  width: 46px;
-  height: 46px;
+  right: var(--space-5);
+  top: var(--space-5);
+  width: var(--icon-md);
+  height: var(--icon-md);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.09);
@@ -614,7 +644,7 @@ input[type="checkbox"] {
 .highlight-box span {
   display: block;
   max-width: calc(100% - 70px);
-  font-size: 0.83rem;
+  font-size: var(--fs-2xs);
   font-weight: 800;
   opacity: 0.9;
   text-transform: uppercase;
@@ -622,28 +652,28 @@ input[type="checkbox"] {
 
 .highlight-box strong {
   display: block;
-  margin-top: 10px;
-  font-size: clamp(2.15rem, 5vw, 3.25rem);
+  margin-top: var(--space-3);
+  font-size: var(--fs-display);
   letter-spacing: 0;
   line-height: 1;
 }
 
 .highlight-box p {
   max-width: 520px;
-  margin: 13px 0 0;
+  margin: var(--space-3) 0 0;
   color: rgba(255, 255, 255, 0.91);
 }
 
 .summary-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .summary-item {
   position: relative;
   min-height: 102px;
-  padding: 16px;
+  padding: var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -659,30 +689,30 @@ input[type="checkbox"] {
 
 .summary-icon {
   display: inline-grid;
-  min-width: 34px;
-  height: 28px;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
   place-items: center;
-  margin-bottom: 10px;
-  padding: 0 8px;
-  border-radius: 999px;
+  margin-bottom: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
   background: var(--primary-soft);
   color: var(--primary);
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   font-weight: 900;
 }
 
 .summary-item > span:not(.summary-icon) {
   display: block;
   color: var(--muted);
-  font-size: 0.83rem;
+  font-size: var(--fs-2xs);
   font-weight: 800;
 }
 
 .summary-item strong {
   display: block;
-  margin-top: 7px;
+  margin-top: var(--space-2);
   color: var(--heading);
-  font-size: 1.04rem;
+  font-size: var(--fs-sm);
   overflow-wrap: anywhere;
 }
 
@@ -694,26 +724,26 @@ input[type="checkbox"] {
 
 .summary-item.full-width strong {
   color: var(--primary);
-  font-size: 1.42rem;
+  font-size: var(--fs-lg);
 }
 
 .dashboard-footer {
-  margin-top: 28px;
-  padding: 20px 0 4px;
+  margin-top: var(--space-5);
+  padding: var(--space-4) 0 var(--space-1);
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: var(--fs-xs);
   text-align: center;
 }
 
 @media (max-width: 900px) {
   .page-shell {
-    width: min(100% - 24px, 720px);
-    padding-top: 18px;
+    width: min(100% - var(--space-5), 720px);
+    padding-top: var(--space-4);
   }
 
   .dashboard-header {
     display: grid;
-    padding-top: 18px;
+    padding-top: var(--space-4);
   }
 
   .dashboard-grid {
@@ -727,15 +757,15 @@ input[type="checkbox"] {
 
 @media (max-width: 560px) {
   .page-shell {
-    width: min(100% - 20px, 520px);
+    width: min(100% - var(--space-4), 520px);
   }
 
   .dashboard-header h1 {
-    font-size: 2rem;
+    font-size: var(--fs-xl);
   }
 
   .dashboard-header p {
-    font-size: 1rem;
+    font-size: var(--fs-sm);
   }
 
   .tab-bar {
@@ -746,12 +776,12 @@ input[type="checkbox"] {
   .tab-button {
     flex: 1 1 auto;
     min-width: 100px;
-    padding: 10px 8px;
-    font-size: 0.82rem;
+    padding: var(--space-3) var(--space-2);
+    font-size: var(--fs-2xs);
   }
 
   .panel {
-    padding: 20px;
+    padding: var(--space-4);
   }
 
   .panel-heading,
@@ -771,12 +801,12 @@ input[type="checkbox"] {
   }
 
   .highlight-box {
-    padding: 22px 20px;
+    padding: var(--space-5) var(--space-4);
   }
 
   .highlight-box::after {
-    width: 36px;
-    height: 36px;
+    width: var(--icon-sm);
+    height: var(--icon-sm);
   }
 
   .highlight-box span {
