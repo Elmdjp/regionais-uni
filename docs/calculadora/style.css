@@ -95,6 +95,11 @@
 
 html {
   min-width: 320px;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
 }
 
 body {
@@ -191,7 +196,8 @@ button {
 
 .eyebrow,
 .section-label {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   align-items: center;
   gap: var(--space-2);
   color: var(--primary);
@@ -228,7 +234,8 @@ button {
 }
 
 .back-link {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   align-items: center;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
@@ -290,10 +297,18 @@ button {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
   gap: var(--space-5);
-  align-items: start;
+  align-items: stretch;
+}
+
+.empty-state,
+.result-content {
+  flex: 1;
 }
 
 .panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: var(--surface-raised);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -564,6 +579,8 @@ input[type="checkbox"] {
 .result-panel {
   position: sticky;
   top: var(--space-5);
+  display: flex;
+  flex-direction: column;
 }
 
 .empty-state {
