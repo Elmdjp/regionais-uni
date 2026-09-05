@@ -202,9 +202,9 @@ svg {
 
 .page-shell {
   position: relative;
-  width: min(1180px, calc(100% - var(--space-6)));
+  width: min(94%, 1400px);
   margin: 0 auto;
-  padding: var(--space-6) 0 var(--space-5);
+  padding: clamp(var(--space-5), 4vw, var(--space-7)) 0 var(--space-5);
 }
 
 .dashboard-header {
@@ -280,7 +280,7 @@ svg {
 
 .tab-bar {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
   gap: var(--space-3);
   margin-bottom: var(--space-5);
 }
@@ -352,15 +352,14 @@ svg {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+  grid-template-columns: minmax(0, 0.95fr) minmax(340px, 1.05fr);
   gap: var(--space-5);
-  align-items: stretch;
+  align-items: start;
 }
 
 .panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
   background: var(--surface-raised);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -931,24 +930,22 @@ input[type="checkbox"] {
 }
 
 .empty-state {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-6) var(--space-4);
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
   background: var(--surface-soft);
   color: var(--muted);
-  text-align: center;
+  text-align: left;
 }
 
 .empty-icon {
   display: grid;
-  width: var(--icon-lg);
-  height: var(--icon-lg);
-  margin-bottom: var(--space-4);
+  width: 40px;
+  height: 40px;
   place-items: center;
   border-radius: 50%;
   background: var(--surface-raised);
@@ -956,15 +953,14 @@ input[type="checkbox"] {
 }
 
 .empty-icon svg {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
 }
 
 .empty-state p {
-  max-width: 340px;
   margin: 0;
   font-size: var(--fs-xs);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .empty-state p strong {
@@ -974,14 +970,13 @@ input[type="checkbox"] {
 
 .result-checklist {
   list-style: none;
-  margin: var(--space-5) 0 0;
-  padding: var(--space-4) 0 0;
+  margin: 0;
+  padding: var(--space-3) 0 0;
   border-top: 1px solid var(--border);
   width: 100%;
-  max-width: 340px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 .result-checklist li {
@@ -995,8 +990,8 @@ input[type="checkbox"] {
 
 .result-checklist svg {
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: var(--primary);
 }
 
@@ -1008,6 +1003,16 @@ input[type="checkbox"] {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+/* .hidden precisa VENCER .result-content/.empty-state mesmo tendo a
+   mesma especificidade "sozinha" — sem isso, o display:flex de
+   .result-content sobrescrevia o display:none de .hidden (mesma
+   especificidade, .result-content vem depois no arquivo) e o card
+   de resultado ficava sempre visível, mesmo antes de calcular. */
+.result-content.hidden,
+.empty-state.hidden {
+  display: none;
 }
 
 .highlight-box {
@@ -1059,12 +1064,16 @@ input[type="checkbox"] {
 
 .summary-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-2);
 }
 
 .summary-item {
-  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface);
@@ -1072,20 +1081,18 @@ input[type="checkbox"] {
 
 .summary-icon {
   display: inline-grid;
-  min-width: 26px;
-  height: 22px;
+  min-width: 24px;
+  height: 20px;
   place-items: center;
-  margin-bottom: var(--space-2);
   padding: 0 var(--space-2);
   border-radius: var(--radius-pill);
   background: var(--surface-soft);
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
 }
 
 .summary-item > span:not(.summary-icon) {
-  display: block;
   color: var(--muted);
   font-size: var(--fs-2xs);
   font-weight: 500;
@@ -1093,7 +1100,7 @@ input[type="checkbox"] {
 
 .summary-item strong {
   display: block;
-  margin-top: var(--space-1);
+  flex-basis: 100%;
   color: var(--heading);
   font-size: var(--fs-sm);
   font-weight: 600;
@@ -1121,11 +1128,7 @@ input[type="checkbox"] {
 
 @media (max-width: 900px) {
   .page-shell {
-    width: min(100% - var(--space-5), 720px);
-  }
-
-  .tab-bar {
-    grid-template-columns: 1fr;
+    width: min(92%, 720px);
   }
 
   .dashboard-grid {
