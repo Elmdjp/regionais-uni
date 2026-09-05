@@ -538,6 +538,268 @@ select {
   cursor: pointer;
 }
 
+/* ---------------------------------------------------------- */
+/* Calendário / month-picker personalizados                    */
+/* (ver datepicker.js — este CSS estiliza o que ele monta)     */
+/* ---------------------------------------------------------- */
+.date-field {
+  position: relative;
+}
+
+.date-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 46px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.date-trigger:hover {
+  border-color: var(--border-strong);
+}
+
+.date-field:focus-within .date-trigger {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-ring);
+  outline: none;
+}
+
+.date-trigger-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+}
+
+.date-trigger-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date-trigger.is-empty .date-trigger-text {
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.date-popover {
+  display: none;
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  width: 300px;
+  max-width: calc(100vw - var(--space-6));
+  padding: var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.date-popover.open {
+  display: block;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.calendar-nav-btn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.calendar-nav-btn:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.calendar-title {
+  color: var(--heading);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: var(--space-1);
+}
+
+.calendar-weekdays span {
+  display: block;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar-day {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+button.calendar-day:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.calendar-day--muted {
+  color: var(--muted);
+  opacity: 0.4;
+  cursor: default;
+}
+
+.calendar-day--today {
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.calendar-day--selected {
+  background: var(--primary);
+  color: #06222b;
+  font-weight: 700;
+}
+
+.calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.calendar-action {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.calendar-action:hover {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.calendar-action--primary {
+  color: var(--primary);
+}
+
+.calendar-action--primary:hover {
+  background: var(--primary-soft);
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.month-cell {
+  padding: var(--space-3) 0;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.month-cell:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.month-cell--today {
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.month-cell--selected {
+  background: var(--primary);
+  color: #06222b;
+}
+
+/* Seletor de dia em pills (substitui visualmente os selects de
+   dia de vencimento, mantendo o <select> original oculto) */
+.day-field {
+  position: relative;
+}
+
+.day-pill-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.day-pill {
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.day-pill:hover {
+  border-color: var(--border-strong);
+}
+
+.day-pill.active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
 .radio-group {
   margin-top: var(--space-1);
 }
