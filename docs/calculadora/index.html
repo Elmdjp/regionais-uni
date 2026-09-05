@@ -261,19 +261,8 @@
         </div>
 
         <form id="contract-form" novalidate>
-          <div class="form-group">
-            <label for="contract-value-select">Valor de referência da quebra de contrato</label>
-            <select id="contract-value-select" name="contractValueOption">
-              <option value="790">R$ 790,00</option>
-              <option value="240">R$ 240,00</option>
-              <option value="550">R$ 550,00</option>
-              <option value="960">R$ 960,00</option>
-              <option value="custom">Outro valor</option>
-            </select>
-          </div>
-
-          <div class="form-group hidden" id="custom-value-group">
-            <label for="custom-contract-value">Valor personalizado</label>
+          <div class="form-group" id="custom-value-group">
+            <label for="custom-contract-value">Valor de referência da quebra de contrato</label>
             <div class="currency-field">
               <span>R$</span>
               <input
@@ -285,6 +274,9 @@
                 placeholder="100,00"
               >
             </div>
+            <select id="contract-value-select" name="contractValueOption" class="sr-only" tabindex="-1">
+              <option value="custom" selected>Outro valor</option>
+            </select>
           </div>
           <small id="contract-value-error" class="error-message" aria-live="polite"></small>
 
