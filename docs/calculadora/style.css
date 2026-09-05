@@ -646,14 +646,22 @@ select {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-2);
   margin-bottom: var(--space-3);
+}
+
+.calendar-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .calendar-nav-btn {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
   border-radius: var(--radius-sm);
   background: var(--surface-soft);
   color: var(--text);
@@ -663,16 +671,27 @@ select {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
+.calendar-nav-btn--year {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 .calendar-nav-btn:hover {
   background: var(--primary-soft);
   color: var(--primary);
 }
 
 .calendar-title {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
   color: var(--heading);
   font-size: var(--fs-xs);
   font-weight: 600;
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .calendar-weekdays {
