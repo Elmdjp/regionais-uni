@@ -285,6 +285,12 @@
       }
     });
 
+    // Se algum outro código (ex.: o botão "Limpar") setar input.value
+    // diretamente e disparar 'input'/'change', o trigger reflete o
+    // novo valor automaticamente.
+    input.addEventListener('input', updateTriggerText);
+    input.addEventListener('change', updateTriggerText);
+
     updateTriggerText();
   }
 
@@ -408,6 +414,12 @@
       }
     });
 
+    // Se algum outro código (ex.: o botão "Limpar") setar input.value
+    // diretamente e disparar 'input'/'change', o trigger reflete o
+    // novo valor automaticamente.
+    input.addEventListener('input', updateTriggerText);
+    input.addEventListener('change', updateTriggerText);
+
     updateTriggerText();
   }
 
@@ -445,6 +457,14 @@
       });
       pills.push(pill);
       pillGroup.appendChild(pill);
+    });
+
+    // Se algum outro código (ex.: o botão "Limpar") setar select.value
+    // diretamente e disparar 'change', as pills refletem o novo valor.
+    select.addEventListener('change', function () {
+      pills.forEach(function (p) {
+        p.classList.toggle('active', p.dataset.value === select.value);
+      });
     });
   }
 
