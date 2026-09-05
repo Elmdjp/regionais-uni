@@ -200,9 +200,15 @@
 
       card.innerHTML =
         '<div class="calendar-header">' +
-        '<button type="button" class="calendar-nav-btn" data-nav="-1" aria-label="Mês anterior">&#8249;</button>' +
+        '<div class="calendar-nav-group">' +
+        '<button type="button" class="calendar-nav-btn calendar-nav-btn--year" data-nav="year-prev" aria-label="Ano anterior">&#171;</button>' +
+        '<button type="button" class="calendar-nav-btn" data-nav="month-prev" aria-label="Mês anterior">&#8249;</button>' +
+        '</div>' +
         '<span class="calendar-title">' + MESES[viewMonth - 1] + ' de ' + viewYear + '</span>' +
-        '<button type="button" class="calendar-nav-btn" data-nav="1" aria-label="Próximo mês">&#8250;</button>' +
+        '<div class="calendar-nav-group">' +
+        '<button type="button" class="calendar-nav-btn" data-nav="month-next" aria-label="Próximo mês">&#8250;</button>' +
+        '<button type="button" class="calendar-nav-btn calendar-nav-btn--year" data-nav="year-next" aria-label="Próximo ano">&#187;</button>' +
+        '</div>' +
         '</div>' +
         '<div class="calendar-weekdays">' + DIAS_SEMANA.map(function (w) { return '<span>' + w + '</span>'; }).join('') + '</div>' +
         '<div class="calendar-grid">' + cells + '</div>' +
@@ -220,7 +226,7 @@
         });
       });
 
-      card.querySelector('[data-nav="-1"]').addEventListener('click', function () {
+      card.querySelector('[data-nav="month-prev"]').addEventListener('click', function () {
         viewMonth -= 1;
         if (viewMonth < 1) {
           viewMonth = 12;
@@ -228,12 +234,20 @@
         }
         renderCalendar();
       });
-      card.querySelector('[data-nav="1"]').addEventListener('click', function () {
+      card.querySelector('[data-nav="month-next"]').addEventListener('click', function () {
         viewMonth += 1;
         if (viewMonth > 12) {
           viewMonth = 1;
           viewYear += 1;
         }
+        renderCalendar();
+      });
+      card.querySelector('[data-nav="year-prev"]').addEventListener('click', function () {
+        viewYear -= 1;
+        renderCalendar();
+      });
+      card.querySelector('[data-nav="year-next"]').addEventListener('click', function () {
+        viewYear += 1;
         renderCalendar();
       });
       card.querySelector('[data-action="clear"]').addEventListener('click', function () {
