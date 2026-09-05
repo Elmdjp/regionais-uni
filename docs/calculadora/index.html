@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="style.css?v=5">
   <style>
     .header-logo {
-      width: 108px;
+      width: clamp(72px, 8vw, 108px);
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -25,9 +25,6 @@
     [data-theme="dark"] .header-logo .logo-light { display: none; }
     [data-theme="light"] .header-logo .logo-dark { display: none; }
     [data-theme="light"] .header-logo .logo-light { display: block; }
-    @media (max-width: 640px) {
-      .header-logo { width: 84px; }
-    }
   </style>
 </head>
 <body>
