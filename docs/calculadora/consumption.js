@@ -263,3 +263,31 @@ consumptionMonthlyFeeInput.addEventListener('input', () => {
 });
 
 updateConsumptionBranchVisibility();
+
+// --- Botão "Limpar": reseta o formulário e volta ao estado inicial. ---
+// Não altera nenhuma lógica de cálculo existente acima, só adiciona
+// um novo comportamento independente.
+const clearConsumptionButton = document.getElementById('clear-consumption');
+
+if (clearConsumptionButton) {
+  clearConsumptionButton.addEventListener('click', () => {
+    consumptionMonthlyFeeInput.value = '';
+    consumptionMonthlyFeeError.textContent = '';
+
+    consumptionMatchYesRadio.checked = true;
+    consumptionMatchNoRadio.checked = false;
+    updateConsumptionBranchVisibility();
+
+    [cancellationDateInput, nextInvoiceDateInput, lastDueDateInput, lastConsumptionDateInput].forEach((input) => {
+      input.value = '';
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    consumptionDateError.textContent = '';
+
+    consumptionResultContent.classList.add('hidden');
+    consumptionResultContent.classList.remove('change-addition', 'change-discount', 'change-none');
+    consumptionEmptyState.classList.remove('hidden');
+    consumptionResultStatus.className = 'status-pill status-neutral';
+    consumptionResultStatus.textContent = 'Aguardando';
+  });
+}
