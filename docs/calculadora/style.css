@@ -205,11 +205,13 @@ svg {
 }
 
 .back-link {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-5);
+  z-index: 100;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  align-self: flex-start;
-  margin-bottom: var(--space-6);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-pill);
   border: 1px solid var(--border);
@@ -218,6 +220,7 @@ svg {
   font-weight: 600;
   font-size: var(--fs-xs);
   text-decoration: none;
+  box-shadow: var(--shadow-soft);
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -838,6 +841,13 @@ input[type="checkbox"] {
   .theme-toggle {
     top: var(--space-3);
     right: var(--space-3);
+  }
+
+  .back-link {
+    top: var(--space-3);
+    left: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-2xs);
   }
 
   .theme-segment {
