@@ -595,22 +595,52 @@ select {
 
 .date-popover {
   display: none;
-  position: absolute;
-  z-index: 60;
-  top: calc(100% + var(--space-2));
-  left: 0;
-  width: 300px;
-  max-width: calc(100vw - var(--space-6));
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(6, 9, 16, 0.6);
+  backdrop-filter: blur(3px);
+  perspective: 1000px;
+}
+
+[data-theme="light"] .date-popover {
+  background: rgba(20, 30, 48, 0.35);
+}
+
+.date-popover.open {
+  display: flex;
+}
+
+.date-popover-inner {
+  width: 320px;
+  max-width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
   padding: var(--space-4);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   background: var(--surface-raised);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(20px);
   box-shadow: var(--shadow);
+  transform: scale(0.86) rotateX(14deg) translateY(14px);
+  opacity: 0;
+  transform-origin: 50% 0%;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
 }
 
-.date-popover.open {
-  display: block;
+.date-popover.open .date-popover-inner {
+  transform: scale(1) rotateX(0deg) translateY(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .date-popover-inner {
+    transition: opacity 0.15s ease;
+    transform: none;
+  }
 }
 
 .calendar-header {
