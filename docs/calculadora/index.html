@@ -32,8 +32,19 @@
 </head>
 <body>
   <button class="theme-toggle" onclick="toggleTheme()" type="button" aria-label="Alternar tema claro/escuro">
-    <span class="theme-segment theme-segment-light" aria-hidden="true">&#9728;&#65039; Modo claro</span>
-    <span class="theme-segment theme-segment-dark" aria-hidden="true">&#127769; Modo escuro</span>
+    <span class="theme-segment theme-segment-light" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="4.3" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M12 2.8V5M12 19V21.2M21.2 12H19M5 12H2.8M18.4 5.6L16.8 7.2M7.2 16.8L5.6 18.4M18.4 18.4L16.8 16.8M7.2 7.2L5.6 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Modo claro
+    </span>
+    <span class="theme-segment theme-segment-dark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M20.5 14.6A8.7 8.7 0 1 1 9.4 3.5a7 7 0 0 0 11.1 11.1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      Modo escuro
+    </span>
     <span class="icon sr-only" id="themeIcon">&#9728;&#65039;</span>
     <span id="themeLabel" class="sr-only">Modo Claro</span>
   </button>
