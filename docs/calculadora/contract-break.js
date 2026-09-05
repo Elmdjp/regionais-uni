@@ -206,3 +206,35 @@ referenceMonthInput.addEventListener('input', () => {
 });
 
 setDefaultReferenceMonth();
+
+// --- Botão "Limpar": reseta o formulário e volta ao estado inicial. ---
+// Não altera nenhuma lógica de cálculo existente acima, só adiciona
+// um novo comportamento independente.
+const clearContractButton = document.getElementById('clear-contract');
+
+if (clearContractButton) {
+  clearContractButton.addEventListener('click', () => {
+    contractValueSelect.value = '790';
+    customContractValueInput.value = '';
+    customValueGroup.classList.add('hidden');
+    contractValueError.textContent = '';
+
+    signingDateInput.value = '';
+    signingDateInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+    contractDueDaySelect.value = '1';
+    contractDueDaySelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+    referenceMonthInput.value = '';
+    setDefaultReferenceMonth();
+    referenceMonthInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+    contractDateError.textContent = '';
+
+    contractResultContent.classList.add('hidden');
+    contractResultContent.classList.remove('change-addition', 'change-none');
+    contractEmptyState.classList.remove('hidden');
+    contractResultStatus.className = 'status-pill status-neutral';
+    contractResultStatus.textContent = 'Aguardando';
+  });
+}
