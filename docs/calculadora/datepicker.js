@@ -19,6 +19,16 @@
  *     setDefaultMonths/setDefaultReferenceMonth) sem saber que
  *     esse componente existe — este arquivo só precisa rodar
  *     DEPOIS deles para exibir esse valor inicial corretamente.
+ *
+ * O calendário/seletor de mês abre como um popup modal
+ * centralizado, com uma pequena animação 3D (escala + rotação
+ * sutil) ao abrir. Cliques dentro do card NUNCA borbulham até o
+ * listener global de "fechar ao clicar fora" — isso evita que o
+ * card seja fechado sozinho ao navegar entre meses/anos (o
+ * re-render troca os botões de lugar a cada clique, então sem
+ * esse corte de propagação o clique "vazava" até o document e
+ * fechava o popup no mesmo instante em que ele deveria só trocar
+ * de mês).
  * ------------------------------------------------------------
  */
 (function () {
@@ -49,6 +59,10 @@
     });
   }
 
+  // Fecha ao clicar fora de qualquer campo de data/mês. Cliques que
+  // acontecem DENTRO do card (.date-popover-inner) nunca chegam até
+  // aqui, porque têm stopPropagation() (ver createPopover abaixo) —
+  // então este listener só trata cliques genuinamente externos.
   document.addEventListener('click', function (event) {
     if (!event.target.closest('.date-field')) {
       closeAllPopovers();
@@ -74,6 +88,46 @@
     return trigger;
   }
 
+  /**
+   * Cria a estrutura do popup modal (backdrop + card) e devolve o
+   * elemento `card`, que é onde o conteúdo (calendário ou grade de
+   * meses) deve ser renderizado a cada re-render.
+   */
+  function createPopover(wrapper) {
+    var popover = document.createElement('div');
+    popover.className = 'date-popover';
+    wrapper.appendChild(popover);
+
+    var card = document.createElement('div');
+    card.className = 'date-popover-inner';
+    popover.appendChild(card);
+
+    // Clique no fundo (fora do card) fecha o popup.
+    popover.addEventListener('click', function (event) {
+      if (event.target === popover) {
+        popover.classList.remove('open');
+      }
+    });
+
+    // Nenhum clique dentro do card deve borbulhar além dele — é
+    // isso que impede o listener global de fechar o popup no meio
+    // de uma navegação de mês/ano (ver comentário no topo do arquivo).
+    card.addEventListener('click', function (event) {
+      event.stopPropagation();
+    });
+
+    return { popover: popover, card: card };
+  }
+
+  function open(popover) {
+    closeAllPopovers(popover);
+    popover.classList.add('open');
+  }
+
+  function close(popover) {
+    popover.classList.remove('open');
+  }
+
   /* ---------------------------------------------------------- */
   /* Campo de DATA (input[type=date])                            */
   /* ---------------------------------------------------------- */
@@ -89,9 +143,9 @@
     var trigger = buildTrigger(placeholderText);
     wrapper.appendChild(trigger);
 
-    var popover = document.createElement('div');
-    popover.className = 'date-popover';
-    wrapper.appendChild(popover);
+    var popoverRefs = createPopover(wrapper);
+    var popover = popoverRefs.popover;
+    var card = popoverRefs.card;
 
     var viewYear;
     var viewMonth;
@@ -144,7 +198,7 @@
         cells += '<span class="calendar-day calendar-day--muted">' + t + '</span>';
       }
 
-      popover.innerHTML =
+      card.innerHTML =
         '<div class="calendar-header">' +
         '<button type="button" class="calendar-nav-btn" data-nav="-1" aria-label="Mês anterior">&#8249;</button>' +
         '<span class="calendar-title">' + MESES[viewMonth - 1] + ' de ' + viewYear + '</span>' +
@@ -157,16 +211,16 @@
         '<button type="button" class="calendar-action calendar-action--primary" data-action="today">Hoje</button>' +
         '</div>';
 
-      popover.querySelectorAll('[data-day]').forEach(function (btn) {
+      card.querySelectorAll('[data-day]').forEach(function (btn) {
         btn.addEventListener('click', function () {
           input.value = viewYear + '-' + pad(viewMonth) + '-' + pad(Number(btn.dataset.day));
           fireChange(input);
           updateTriggerText();
-          popover.classList.remove('open');
+          close(popover);
         });
       });
 
-      popover.querySelector('[data-nav="-1"]').addEventListener('click', function () {
+      card.querySelector('[data-nav="-1"]').addEventListener('click', function () {
         viewMonth -= 1;
         if (viewMonth < 1) {
           viewMonth = 12;
@@ -174,7 +228,7 @@
         }
         renderCalendar();
       });
-      popover.querySelector('[data-nav="1"]').addEventListener('click', function () {
+      card.querySelector('[data-nav="1"]').addEventListener('click', function () {
         viewMonth += 1;
         if (viewMonth > 12) {
           viewMonth = 1;
@@ -182,13 +236,13 @@
         }
         renderCalendar();
       });
-      popover.querySelector('[data-action="clear"]').addEventListener('click', function () {
+      card.querySelector('[data-action="clear"]').addEventListener('click', function () {
         input.value = '';
         fireChange(input);
         updateTriggerText();
-        popover.classList.remove('open');
+        close(popover);
       });
-      popover.querySelector('[data-action="today"]').addEventListener('click', function () {
+      card.querySelector('[data-action="today"]').addEventListener('click', function () {
         var now = new Date();
         input.value = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
         fireChange(input);
@@ -205,14 +259,13 @@
       viewYear = selected ? selected.y : today.getFullYear();
       viewMonth = selected ? selected.m : today.getMonth() + 1;
       renderCalendar();
-      closeAllPopovers(popover);
-      popover.classList.add('open');
+      open(popover);
     }
 
     trigger.addEventListener('click', function (event) {
       event.stopPropagation();
       if (popover.classList.contains('open')) {
-        popover.classList.remove('open');
+        close(popover);
       } else {
         openPopover();
       }
@@ -236,9 +289,10 @@
     var trigger = buildTrigger(placeholderText);
     wrapper.appendChild(trigger);
 
-    var popover = document.createElement('div');
-    popover.className = 'date-popover month-popover';
-    wrapper.appendChild(popover);
+    var popoverRefs = createPopover(wrapper);
+    var popover = popoverRefs.popover;
+    var card = popoverRefs.card;
+    popover.classList.add('month-popover-overlay');
 
     var viewYear;
 
@@ -279,7 +333,7 @@
         cells += '<button type="button" class="' + classes.join(' ') + '" data-month="' + m + '">' + MESES_ABREV[m - 1] + '</button>';
       }
 
-      popover.innerHTML =
+      card.innerHTML =
         '<div class="calendar-header">' +
         '<button type="button" class="calendar-nav-btn" data-nav="-1" aria-label="Ano anterior">&#8249;</button>' +
         '<span class="calendar-title">' + viewYear + '</span>' +
@@ -291,30 +345,30 @@
         '<button type="button" class="calendar-action calendar-action--primary" data-action="current">Este mês</button>' +
         '</div>';
 
-      popover.querySelectorAll('[data-month]').forEach(function (btn) {
+      card.querySelectorAll('[data-month]').forEach(function (btn) {
         btn.addEventListener('click', function () {
           input.value = viewYear + '-' + pad(Number(btn.dataset.month));
           fireChange(input);
           updateTriggerText();
-          popover.classList.remove('open');
+          close(popover);
         });
       });
 
-      popover.querySelector('[data-nav="-1"]').addEventListener('click', function () {
+      card.querySelector('[data-nav="-1"]').addEventListener('click', function () {
         viewYear -= 1;
         renderMonths();
       });
-      popover.querySelector('[data-nav="1"]').addEventListener('click', function () {
+      card.querySelector('[data-nav="1"]').addEventListener('click', function () {
         viewYear += 1;
         renderMonths();
       });
-      popover.querySelector('[data-action="clear"]').addEventListener('click', function () {
+      card.querySelector('[data-action="clear"]').addEventListener('click', function () {
         input.value = '';
         fireChange(input);
         updateTriggerText();
-        popover.classList.remove('open');
+        close(popover);
       });
-      popover.querySelector('[data-action="current"]').addEventListener('click', function () {
+      card.querySelector('[data-action="current"]').addEventListener('click', function () {
         var now = new Date();
         input.value = now.getFullYear() + '-' + pad(now.getMonth() + 1);
         fireChange(input);
@@ -328,14 +382,13 @@
       var selected = parseValue();
       viewYear = selected ? selected.y : new Date().getFullYear();
       renderMonths();
-      closeAllPopovers(popover);
-      popover.classList.add('open');
+      open(popover);
     }
 
     trigger.addEventListener('click', function (event) {
       event.stopPropagation();
       if (popover.classList.contains('open')) {
-        popover.classList.remove('open');
+        close(popover);
       } else {
         openPopover();
       }
