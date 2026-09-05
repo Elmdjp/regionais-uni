@@ -246,3 +246,36 @@ newDueMonthInput.addEventListener('input', () => {
 });
 
 setDefaultMonths();
+
+// --- Botão "Limpar": reseta o formulário e volta ao estado inicial. ---
+// Não altera nenhuma lógica de cálculo existente acima, só adiciona
+// um novo comportamento independente.
+const clearDueDateButton = document.getElementById('clear-due-date');
+
+if (clearDueDateButton) {
+  clearDueDateButton.addEventListener('click', () => {
+    monthlyFeeInput.value = '';
+    monthlyFeeError.textContent = '';
+
+    currentDueDaySelect.value = '1';
+    currentDueDaySelect.dispatchEvent(new Event('change', { bubbles: true }));
+    newDueDaySelect.value = '1';
+    newDueDaySelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+    currentDueMonthInput.value = '';
+    newDueMonthInput.value = '';
+    setDefaultMonths();
+    currentDueMonthInput.dispatchEvent(new Event('change', { bubbles: true }));
+    newDueMonthInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+    dateError.textContent = '';
+
+    resultContent.classList.add('hidden');
+    resultContent.classList.remove('change-addition', 'change-discount', 'change-none');
+    emptyState.classList.remove('hidden');
+    resultStatus.className = 'status-pill status-neutral';
+    resultStatus.textContent = 'Aguardando';
+
+    monthlyFeeInput.focus();
+  });
+}
