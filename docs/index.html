@@ -507,14 +507,17 @@ function renderCards() {
       const distritoClass = c.distrito ? ' distrito' : (c.aldeia ? ' aldeia' : '');
 const suffix = c.distrito ? (c.vila ? ' (Vila)' : ' (Distrito)') : (c.aldeia ? ' (Aldeia)' : '');
 
-      const mapsHref = c.mapsUrl || (c.coords ? `https://www.google.com/maps?q=${c.coords.lat},${c.coords.lng}` : null);
-      const mapsLinkHTML = mapsHref
-        ? `<a class="maps-link" href="${mapsHref}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`
-        : '';
+      const explicitMapsHref = c.mapsUrl || (c.coords ? `https://www.google.com/maps?q=${c.coords.lat},${c.coords.lng}` : null);
 
       if (!hasAddr) {
-        return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span>${mapsLinkHTML}</div>`;
+        const cityMapsHref = explicitMapsHref || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.nome + ' - RO')}`;
+        const cityMapsHTML = `<a class="maps-link" href="${cityMapsHref}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`;
+        return `<div class="city-row"><span class="city-tag${distritoClass}">${c.nome}${suffix}</span>${cityMapsHTML}</div>`;
       }
+
+      const mapsLinkHTML = explicitMapsHref
+        ? `<a class="maps-link" href="${explicitMapsHref}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`
+        : '';
 
       const addrLines = c.addrs.map(a => {
         const labelHTML = a.label ? `<div class="addr-label">${a.label}</div>` : '';
