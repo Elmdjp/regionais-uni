@@ -518,9 +518,8 @@ const suffix = c.distrito ? (c.vila ? ' (Vila)' : ' (Distrito)') : (c.aldeia ? '
 
       const addrLines = c.addrs.map(a => {
         const labelHTML = a.label ? `<div class="addr-label">${a.label}</div>` : '';
-        const addrMapsHTML = a.maps
-          ? `<a class="maps-link" href="${a.maps}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`
-          : '';
+        const addrMapsHref = a.maps || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.end)}`;
+        const addrMapsHTML = `<a class="maps-link" href="${addrMapsHref}" target="_blank" rel="noopener" title="Abrir no Google Maps" onclick="event.stopPropagation()">🗺️</a>`;
         return `<div class="addr-line"><span class="addr-icon">📍</span><div>${labelHTML}${a.end}</div>${addrMapsHTML}</div>`;
       }).join('');
 
