@@ -17,6 +17,7 @@ const filiais = [
     num: 7, nome: "Machadinho D'Oeste", sigla: "MDO", regional: "Comercial Regional Machadinho D'Oeste",
     gerente: "Jéssica Brandão", supervisor: "Davi Silva", operacional: "Rildo Pandolfi",
     cidades: [
+      { nome: "Machadinho D'Oeste", addrs: [{ end: "Av. Tancredo Neves - Machadinho D'Oeste, RO, 76868-000" }] },
       { nome: "Cujubim", addrs: [{ end: "Av. Cujubim, 2222 - Centro - CEP 76864-000" }] },
       { nome: "Vale do Anari", addrs: [{ end: "Av. Acyr Jose Damasceno, 4118 - Centro - CEP 76867-000" }] },
       { nome: "5° BEC", distrito: true },
